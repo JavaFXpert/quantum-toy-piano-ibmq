@@ -4,7 +4,7 @@ from qiskit import available_backends, execute
 from math import *
 import numpy as np
 
-def compute_circuit(angles_vector_in_degrees_str, q, qc):
+def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     rotation_deg_of_freedom = 6
     a = [0] * rotation_deg_of_freedom
     for i in range(rotation_deg_of_freedom):
@@ -81,6 +81,8 @@ def compute_circuit(angles_vector_in_degrees_str, q, qc):
     qc.u3(-a[5], 0, 0, q[0])
     qc.cx(q[1], q[0])
     qc.u3(a[5], 0, 0, q[0])
+
+    qc.measure(q, c)
 
     return qc
 
