@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Music</title>
+
+  <!--link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css"-->
+  <link href="roboto.css" rel="stylesheet" type="text/css">
+
+  <!--link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet" type="text/css"></link-->
+  <link href="vuetify.min.css" rel="stylesheet" type="text/css">
+
+  <link href="styles.css" rel="stylesheet" type="text/css">
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+
+  <!--script src="https://unpkg.com/vue/dist/vue.js"></script-->
+  <script src="scripts/vue.js"></script>
+
+  <!--script src="https://unpkg.com/vuetify/dist/vuetify.js"></script-->
+  <script src="scripts/vuetify.js"></script>
+
+  <script src="scripts/math.js"></script>
+
+  <script src="scripts/jquery.min.js"></script>
+
+  <script src="scripts/axios.min.js"></script>
+
+  <script src="main.js"></script>
+  <script src="piano.js"></script>
+  <script src="stochastic-matrix.js"></script>
+  <script src="unistochastic-matrix.js"></script>
+  <script src="stochastic-harmony-matrix.js"></script>
+  <script src="unistochastic-harmony-matrix.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <main>
+        <v-content>
+
+          <v-tabs>
+
+            <v-tab>Melody Matrices</v-tab>
+            <v-tab-item>
+              <v-container fluid>
+                <v-layout row wrap>
+                  <v-flex xs6>
+                    <unistochastic-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :wantedmatrix="desiredMelodyMatrix">
+                    </unistochastic-matrix>
+                  </v-flex>
+                  <v-flex xs6>
+                    <stochastic-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :mathmatrix="desiredMelodyMatrix.valueOf()">
+                    </stochastic-matrix>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-tab-item>
+
+            <v-tab>Harmony Matrices</v-tab>
+            <v-tab-item>
+              <v-container fluid>
+                <v-layout row wrap>
+                  <v-flex xs6>
+                    <unistochastic-harmony-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :wantedmatrix="desiredHarmonyMatrix">
+                    </unistochastic-harmony-matrix>
+                  </v-flex>
+                  <v-flex xs6>
+                    <stochastic-harmony-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :mathmatrix="desiredHarmonyMatrix.valueOf()">
+                    </stochastic-harmony-matrix>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-tab-item>
+
+            <v-tab>Piano</v-tab>
+            <v-tab-item>
+              <v-container fluid>
+                <div id="piano">
+                  <piano-component/>
+                </div>
+              </v-container>
+            </v-tab-item>
+          </v-tabs>
+        </v-content>
+      </main>
+    </v-app>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        clipped: false,
+        drawer: true,
+        fixed: false,
+        items: [
+          { icon: 'bubble_chart', title: 'Inspire' }
+        ],
+        miniVariant: false,
+        right: true,
+        rightDrawer: false,
+        title: 'Quantum Music',
+        gridNumRowsCols: 4,
+        gridRowNames: ["C", "D", "E", "F"],
+        gridColNames: ["C", "D", "E", "F"],
+        desiredMelodyMatrix: math.matrix(
+//            C4   D4   E4   F4
+          [ [.00, .80, .20, .00],   //C4
+            [.60, .00, .40, .00],   //D4
+            [.00, .60, .00, .40],   //E4
+            [.00, .20, .80, .00]]), //F4
+
+        desiredHarmonyMatrix: math.matrix(
+//            C4   D4   E4   F4
+          [ [.00, .00, 1.0, .00],   //C4
+            [.00, .00, .00, 1.0],   //D4
+            [1.0, .00, .00, .00],   //E4
+            [.00, 1.0, .00, .00]]), //F4
+      }
+    })
+  </script>
+</body>
+</html>

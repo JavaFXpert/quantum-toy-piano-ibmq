@@ -1,0 +1,236 @@
+@charset "UTF-8";
+* {
+  vertical-align: top;
+  font-family: 微軟正黑體;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+/** CSS Styles */
+
+#getting-started .intro {
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
+}
+
+#getting-started .card {
+  border-radius: 0;
+  margin-bottom: 5rem;
+}
+
+#getting-started a {
+  color: inherit;
+}
+
+#getting-started .list {
+  margin: 0 2rem !important;
+}
+
+#getting-started main {
+  text-align: center;
+}
+
+#getting-started h2 {
+  text-align: center;
+}
+
+/** From original quantum-music */
+
+body {
+  font-family: Helvetica Neue, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+}
+
+table {
+  border: 2px solid #42b983;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+th {
+  background-color: #0000ff;
+  color: rgba(255,255,255,0.66);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+td {
+  background-color: #ffffff;
+}
+
+th, td {
+  min-width: 50px;
+  padding: 10px 20px;
+}
+
+th.active {
+  color: #fff;
+}
+
+#raw {
+  position: absolute;
+  top: 0;
+  left: 1000px;
+}
+
+#degree-decimals {
+  width: 50px;
+}
+
+input[type=range] {
+  margin-left: 8px;
+}
+
+.rot-slider {
+  width: 100px;
+  padding: 0px;
+  margin: 0px;
+}
+
+/** More from Piano Project **/
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  margin-bottom: 30px;
+  color: #585858;
+}
+
+button {
+  background-color: transparent;
+  border: solid 1px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  cursor: pointer;
+  vertical-align: middle;
+}
+button:hover {
+  background-color: #585858;
+  color: white;
+}
+
+.notes_list li {
+  display: inline-block;
+  border-right: solid 1px;
+  padding: 2px 5px;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.notes_list li:hover {
+  background-color: #e1e1e1;
+}
+.notes_list li.playing {
+  background-color: #d5d5d5;
+}
+.notes_list li .time {
+  font-size: 8px;
+  opacity: 0.3;
+}
+.notes_list li .num {
+  font-size: 16px;
+}
+
+.center_box {
+  /*
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  */
+  width: 100%;
+}
+
+.keyboard {
+  -webkit-box-shadow: 0px 0px 40px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 40px -5px rgba(0, 0, 0, 0.4);
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.pianokey {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.white.playing {
+  background-color: #d5d5d5;
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
+}
+
+.black.playing {
+  background-color: #727272;
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
+}
+
+.white {
+  width: 44px;
+  height: 300px;
+  border: solid 1px #eee;
+  -webkit-transform: translate(-3px, -3px);
+  transform: translate(-3px, -3px);
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+.white:hover {
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
+  background-color: #eee;
+}
+
+.black {
+  position: absolute;
+  top: 0px;
+  width: 22px;
+  height: 165px;
+  background-color: #585858;
+  margin-left: -11px;
+  margin-right: -11px;
+  z-index: 20;
+  -webkit-transform: translate(-3px, -3px);
+  transform: translate(-3px, -3px);
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+.black:hover {
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
+  background-color: #3f3f3f;
+}
+
+.label {
+  position: absolute;
+  color: rgba(88, 88, 88, 0.5);
+  bottom: -25px;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+  transform: translate(-50%);
+  font-size: 8px;
+}
+
+i {
+  margin-left: 5px;
+  margin-right: 0px;
+  margin-top: 3px;
+}
+
+i.fa-circle {
+  color: #cc0000;
+}
