@@ -111,20 +111,22 @@ def toy_piano_counterpoint():
                         input_qc.x(input_q[NUM_CIRCUIT_WIRES - 1 - bit_idx])
 
                 qp.add_circuit("input_qubits", input_qc)
-                print("----input_qubits----")
-                print(qp.get_qasm("input_qubits"))
-                print("----end input_qubits----")
+                # print("----input_qubits----")
+                # print(qp.get_qasm("input_qubits"))
+                # print("----end input_qubits----")
 
                 qp.add_circuit("rot_melodic", rot_melodic_circuit)
-                print("----rot_melodic----")
-                print(qp.get_qasm("rot_melodic"))
-                print("----end rot_melodic----")
+                # print("----rot_melodic----")
+                # print(qp.get_qasm("rot_melodic"))
+                # print("----end rot_melodic----")
 
                 sim_result = qp.execute(backend = quantum_backend, shots = 1)
 
                 # Show the results
                 print("simulation: ", sim_result)
-                print(sim_result.get_counts(qc))
+                bitstr = list(sim_result.get_counts("rot_melodic").keys())[0]
+                print("bitstr:")
+                print(bitstr)
 
                 ##TODO LEFT OFF HERE
 
