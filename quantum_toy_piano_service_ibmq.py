@@ -46,16 +46,12 @@ def toy_piano_counterpoint():
     pitch_index = int(request.args['pitch_index'])
     if (pitch_index >= NUM_PITCHES):
         pitch_index %= (DIATONIC_SCALE_OCTAVE_PITCHES - 1)
-    #print("pitch_index: ", pitch_index)
 
     species = int(request.args['species'])
-    #print("species: ", species)
 
     melodic_degrees = request.args['melodic_degrees'].split(",")
-    #print("melodic_degrees: ", melodic_degrees)
 
     harmonic_degrees = request.args['harmonic_degrees'].split(",")
-    #print("harmonic_degrees: ", harmonic_degrees)
 
     use_simulator = request.args['use_simulator'].lower() == "true"
     print("use_simulator: ", use_simulator)
@@ -69,11 +65,9 @@ def toy_piano_counterpoint():
         c_req = ClassicalRegister(3)
 
         qc_melodic = QuantumCircuit(q_reg, c_req)
-
         rot_melodic_circuit = compute_circuit(melodic_degrees, q_reg, c_req, qc_melodic)
 
         qc_harmonic = QuantumCircuit(q_reg, c_req)
-
         rot_harmonic_circuit = compute_circuit(harmonic_degrees, q_reg, c_req, qc_harmonic)
 
         harmony_notes_factor = 2**(species - 1)  # Number of harmony notes for each melody note
@@ -87,8 +81,6 @@ def toy_piano_counterpoint():
 
         composition_bits = [0] * num_composition_bits
 
-        print(composition_bits)
-
         # Convert the pitch index to a binary string, and place into the
         # composition_bits array, least significant bits in lowest elements of array
         qubit_string = format(pitch_index, '03b')
@@ -98,14 +90,11 @@ def toy_piano_counterpoint():
             else:
                 composition_bits[idx] = 1
 
-        print(composition_bits)
-
         num_runs = 1
 
         for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
             #
             if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
-
                 qp = QuantumProgram()
                 input_qc = QuantumCircuit(q_reg, c_req)
 
@@ -116,28 +105,18 @@ def toy_piano_counterpoint():
                         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
 
                 input_qc.extend(rot_melodic_circuit)
-
                 qp.add_circuit("complete_rot_melodic", input_qc)
-                print("----complete_rot_melodic----")
+
+                # print("----complete_rot_melodic----")
                 # print(qp.get_qasm("complete_rot_melodic"))
-                print("----end complete_rot_melodic----")
+                # print("----end complete_rot_melodic----")
 
                 sim_result = qp.execute(backend = quantum_backend, shots = 1)
-
                 bitstr = list(sim_result.get_counts("complete_rot_melodic").keys())[0]
-                # print("bitstr:")
-                # print(bitstr)
-
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     composition_bits[(melody_note_idx + 1) * NUM_CIRCUIT_WIRES + bit_idx] = int(bitstr[bit_idx])
 
-                print(composition_bits)
-
                 measured_pitch = int(bitstr, 2)
-
-                print("melody melody_note_idx measured_pitch")
-                print(melody_note_idx)
-                print(measured_pitch)
 
             # Now compute a harmony note for the melody note
             #print("Now compute a harmony note for the melody note")
@@ -151,30 +130,20 @@ def toy_piano_counterpoint():
                     input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
 
             input_qc.extend(rot_harmonic_circuit)
-
             qp.add_circuit("complete_rot_harmonic", input_qc)
-            print("----complete_rot_harmonic----")
+
+            # print("----complete_rot_harmonic----")
             # print(qp.get_qasm("complete_rot_harmonic"))
-            print("----end complete_rot_harmonic----")
+            # print("----end complete_rot_harmonic----")
 
             sim_result = qp.execute(backend=quantum_backend, shots=1)
-
             bitstr = list(sim_result.get_counts("complete_rot_harmonic").keys())[0]
-            # print("bitstr:")
-            # print(bitstr)
 
             for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                 composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                  (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
-            print(composition_bits)
-
             measured_pitch = int(bitstr, 2)
-
-            print("melody melody_note_idx measured_pitch")
-            print(melody_note_idx)
-            print(measured_pitch)
-
 
             # Now compute melody notes to follow the harmony note
             #print("Now compute melody notes to follow the harmony note")
@@ -191,30 +160,21 @@ def toy_piano_counterpoint():
                         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
 
                 input_qc.extend(rot_melodic_circuit)
-
                 qp.add_circuit("complete_rot_melodic_b", input_qc)
-                print("----complete_rot_melodic_b----")
+
+                # print("----complete_rot_melodic_b----")
                 # print(qp.get_qasm("complete_rot_melodic_b"))
-                print("----end complete_rot_melodic_b----")
+                # print("----end complete_rot_melodic_b----")
 
                 sim_result = qp.execute(backend=quantum_backend, shots=1)
-
                 bitstr = list(sim_result.get_counts("complete_rot_melodic_b").keys())[0]
-                # print("bitstr:")
-                # print(bitstr)
 
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                       ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
                                      (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
-                print(composition_bits)
-
                 measured_pitch = int(bitstr, 2)
-
-                print("melody melody_note_idx measured_pitch")
-                print(melody_note_idx)
-                print(measured_pitch)
 
         all_note_nums = create_note_nums_array(composition_bits)
         melody_note_nums = all_note_nums[0:TOTAL_MELODY_NOTES]

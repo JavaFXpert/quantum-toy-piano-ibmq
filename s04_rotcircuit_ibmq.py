@@ -22,7 +22,7 @@ def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     qc.u3(a[0], 0, 0, q[0])
     qc.x(q[1])
 
-    # CE rotation (GOOD)
+    # CE rotation
     qc.x(q[0])
     qc.h(q[0])
     qc.h(q[1])
@@ -34,7 +34,7 @@ def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     qc.u3(a[1], 0, 0, q[1])
     qc.x(q[0])
 
-    # CF rotation (GOOD)
+    # CF rotation
     qc.x(q[0])
     qc.h(q[0])
     qc.h(q[1])
@@ -54,7 +54,7 @@ def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     qc.h(q[1])
     qc.x(q[0])
 
-    # DE rotation (GOOD)
+    # DE rotation
     qc.cx(q[1], q[0])
     qc.h(q[0])
     qc.h(q[1])
@@ -66,7 +66,7 @@ def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     qc.u3(a[3], 0, 0, q[1])
     qc.cx(q[1], q[0])
 
-    # DF rotation (GOOD)
+    # DF rotation
     qc.h(q[0])
     qc.h(q[1])
     qc.cx(q[1], q[0])
@@ -76,7 +76,7 @@ def compute_circuit(angles_vector_in_degrees_str, q, c, qc):
     qc.h(q[1])
     qc.u3(a[4], 0, 0, q[1])
 
-    # EF rotation (GOOD)
+    # EF rotation
     qc.cx(q[1], q[0])
     qc.u3(-a[5], 0, 0, q[0])
     qc.cx(q[1], q[0])
