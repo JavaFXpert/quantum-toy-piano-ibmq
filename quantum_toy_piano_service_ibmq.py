@@ -23,8 +23,8 @@ TOTAL_MELODY_NOTES = 7
 #        pitch_index Index (0 - 3) of the initial pitch for which a composition is desired. This determines
 #                    the mode (Ionian, Dorian, etc.) of the composition
 #        species Number (1 - 3) representing the species of counterpoint desired
-#        melodic_degrees Comma-delimited string containing 28 rotations in degrees for melody matrix
-#        harmonic_degrees Comma-delimited string containing 28 rotations in degrees for harmony matrix
+#        melodic_degrees Comma-delimited string containing 6 rotations in degrees for melody matrix
+#        harmonic_degrees Comma-delimited string containing 6 rotations in degrees for harmony matrix
 #
 #    Returns JSON string containing:
 #        melody_part

@@ -32,12 +32,30 @@ Vue.component('stochastic-harmony-matrix', {
             '{{parseFloat(Math.round(rowTotal(rowIdx) * 100) / 100).toFixed(2)}}' +
           '</td>' +
         '</tr>' +
+        '<tr>' +
+          '<th>Tot</th>' +
+          '<td v-for="(colNum, colIdx) in numrowscols">' +
+            '{{parseFloat(Math.round(colTotal(colIdx) * 100) / 100).toFixed(2)}}' +
+          '</td>' +
+        '</tr>' +
       '</tbody>' +
     '</table>',
   methods: {
     rowTotal: function(rIdx) {
       var total = 0.0;
       for (var cIdx = 0; cIdx < this.numrowscols; cIdx++) {
+        try {
+          total += parseFloat(this.mathmatrix[rIdx][cIdx]);
+        }
+        catch(err) {
+          console.log("err: " + err);
+        }
+      }
+      return total;
+    },
+    colTotal: function(cIdx) {
+      var total = 0.0;
+      for (var rIdx = 0; rIdx < this.numrowscols; rIdx++) {
         try {
           total += parseFloat(this.mathmatrix[rIdx][cIdx]);
         }
