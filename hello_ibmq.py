@@ -2,6 +2,11 @@
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, QuantumProgram
 from qiskit import available_backends, execute
 
+from qiskit import register
+import Qconfig
+
+register(Qconfig.APItoken, Qconfig.config["url"])
+
 qp = QuantumProgram()
 
 # Create a Quantum Register with 2 qubits.
@@ -33,10 +38,10 @@ qp.add_circuit("bell", qca)
 print(qp.get_qasm("bell"))
 
 # See a list of available local simulators
-print("Local backends: ", available_backends({'local': True}))
+print("Local backends: ", available_backends({'local': False}))
 
 # Compile and run the Quantum circuit on a simulator backend
-sim_result = qp.execute(backend = "local_qasm_simulator", shots = 1)
+sim_result = qp.execute(backend = "ibmqx4", shots = 1)
 
 
 # Show the results

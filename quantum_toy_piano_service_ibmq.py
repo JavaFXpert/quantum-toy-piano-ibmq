@@ -6,6 +6,12 @@ from flask import Flask, jsonify, request
 import copy
 from s04_rotcircuit_ibmq import *
 
+from qiskit import register
+import Qconfig
+
+register(Qconfig.APItoken, Qconfig.config["url"])
+
+
 app = Flask(__name__)
 
 DEGREES_OF_FREEDOM = 6
@@ -77,7 +83,7 @@ def toy_piano_counterpoint():
             quantum_backend = "local_qasm_simulator"
         else:
             # TODO: Modify to use real quantum chip
-            quantum_backend = "local_qasm_simulator"
+            quantum_backend = "ibmqx4"
 
         composition_bits = [0] * num_composition_bits
 
@@ -107,7 +113,7 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_melodic_circuit)
                 qp.add_circuit("complete_rot_melodic", input_qc)
 
-                # print("----complete_rot_melodic----")
+                print("----complete_rot_melodic----")
                 # print(qp.get_qasm("complete_rot_melodic"))
                 # print("----end complete_rot_melodic----")
 
@@ -132,7 +138,7 @@ def toy_piano_counterpoint():
             input_qc.extend(rot_harmonic_circuit)
             qp.add_circuit("complete_rot_harmonic", input_qc)
 
-            # print("----complete_rot_harmonic----")
+            print("----complete_rot_harmonic----")
             # print(qp.get_qasm("complete_rot_harmonic"))
             # print("----end complete_rot_harmonic----")
 
@@ -162,7 +168,7 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_melodic_circuit)
                 qp.add_circuit("complete_rot_melodic_b", input_qc)
 
-                # print("----complete_rot_melodic_b----")
+                print("----complete_rot_melodic_b----")
                 # print(qp.get_qasm("complete_rot_melodic_b"))
                 # print("----end complete_rot_melodic_b----")
 
@@ -183,7 +189,7 @@ def toy_piano_counterpoint():
     if use_simulator:
         composer = "IBM Quantum Simulator"
     else:
-        composer = "IBM Quantum Processor"
+        composer = "IBM Q 5 Tenerife"
 
     ret_dict = {"melody": melody_note_nums,
                 "harmony": harmony_note_nums,
