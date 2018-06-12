@@ -80,16 +80,16 @@ def toy_piano_counterpoint():
 
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
-        num_required_melodic_circuits_per_pitch = 1 # 27
-        num_required_harmonic_circuits_per_pitch = 1 # 7
+        num_required_melodic_circuits_per_pitch = 27
+        num_required_harmonic_circuits_per_pitch = 7
 
         # input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
-            input_qc = QuantumCircuit(q_reg, c_req)
             for melodic_circuit_idx in range(0, num_required_melodic_circuits_per_pitch):
+                input_qc = QuantumCircuit(q_reg, c_req)
                 qubit_string = format(pitch_idx, '03b') # Must match NUM_CIRCUIT_WIRES
 
-                print (qubit_string + ":" + str(melodic_circuit_idx))
+                # print (qubit_string + ":" + str(melodic_circuit_idx))
 
                 for char_idx in range(NUM_CIRCUIT_WIRES):
                     if qubit_string[char_idx] == '0':
@@ -100,16 +100,16 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_melodic_circuit)
                 qp.add_circuit(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'), input_qc)
 
-                print(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'))
-                print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
+                # print(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'))
+                # print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
 
         input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
-            input_qc = QuantumCircuit(q_reg, c_req)
             for harmonic_circuit_idx in range(0, num_required_harmonic_circuits_per_pitch):
+                input_qc = QuantumCircuit(q_reg, c_req)
                 qubit_string = format(pitch_idx, '03b') # Must match NUM_CIRCUIT_WIRES
 
-                print (qubit_string + ":" + str(harmonic_circuit_idx))
+                # print (qubit_string + ":" + str(harmonic_circuit_idx))
 
                 for idx, qubit_char in enumerate(qubit_string):
                     if qubit_char == '0':
@@ -120,9 +120,10 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_harmonic_circuit)
                 qp.add_circuit(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'), input_qc)
 
-                print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
+                # print(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'))
+                # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
 
-        print(qp.get_circuit_names())
+        # print(qp.get_circuit_names())
 
         if use_simulator:
             quantum_backend = "local_qasm_simulator"
