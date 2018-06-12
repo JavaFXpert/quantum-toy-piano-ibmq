@@ -97,10 +97,15 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_melodic_circuit)
                 qp.add_circuit(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'), input_qc)
 
+                print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
+
         input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
             for harmonic_circuit_idx in range(0, num_required_harmonic_circuits_per_pitch):
                 qubit_string = format(pitch_idx, '03b') # Must match NUM_CIRCUIT_WIRES
+
+                print (qubit_string + ":" + str(harmonic_circuit_idx))
+
                 for idx, qubit_char in enumerate(qubit_string):
                     input_qc = QuantumCircuit(q_reg, c_req)
                     if qubit_char == '0':
@@ -114,16 +119,25 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_harmonic_circuit)
                 qp.add_circuit(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'), input_qc)
 
-        print(qp.get_circuit_names())
+                print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
 
-        harmony_notes_factor = 2**(species - 1)  # Number of harmony notes for each melody note
-        num_composition_bits = TOTAL_MELODY_NOTES * (harmony_notes_factor + 1) * NUM_CIRCUIT_WIRES
+        print(qp.get_circuit_names())
 
         if use_simulator:
             quantum_backend = "local_qasm_simulator"
         else:
             # TODO: Modify to use real quantum chip
             quantum_backend = "ibmqx5"
+
+        sim_result = qp.execute(qp.get_circuit_names(), backend=quantum_backend, shots=1)
+
+        for circuit_name in qp.get_circuit_names():
+            print(circuit_name)
+            print(sim_result.get_counts(circuit_name))
+            print()
+
+        harmony_notes_factor = 2**(species - 1)  # Number of harmony notes for each melody note
+        num_composition_bits = TOTAL_MELODY_NOTES * (harmony_notes_factor + 1) * NUM_CIRCUIT_WIRES
 
         composition_bits = [0] * num_composition_bits
 
