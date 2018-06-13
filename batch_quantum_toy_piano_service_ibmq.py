@@ -5,6 +5,7 @@ import numpy as np
 from flask import Flask, jsonify, request
 import copy
 from s04_rotcircuit_ibmq import *
+from collections import deque
 
 from qiskit import register
 import Qconfig
@@ -19,6 +20,7 @@ NUM_PITCHES = 4
 DIATONIC_SCALE_OCTAVE_PITCHES = 8
 NUM_CIRCUIT_WIRES = 3
 TOTAL_MELODY_NOTES = 7
+CIRCUIT_RESULT_KEY_LENGTH = 5 # '000_m' is such a key, for example
 
 ###
 # Produces a musical (specifically second-species counterpoint) composition for
@@ -67,6 +69,18 @@ def toy_piano_counterpoint():
             1 <= species <= 3 and
             0 <= pitch_index < NUM_PITCHES):
 
+        res_dict = dict()
+        res_dict['000_m'] = deque([])
+        res_dict['000_h'] = deque([])
+        res_dict['001_m'] = deque([])
+        res_dict['001_h'] = deque([])
+        res_dict['010_m'] = deque([])
+        res_dict['010_h'] = deque([])
+        res_dict['011_m'] = deque([])
+        res_dict['011_h'] = deque([])
+
+        # first = res_dict[tmpin].popleft()
+
         q_reg = QuantumRegister(3)
         c_req = ClassicalRegister(3)
 
@@ -80,8 +94,8 @@ def toy_piano_counterpoint():
 
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
-        num_required_melodic_circuits_per_pitch = 27
-        num_required_harmonic_circuits_per_pitch = 7
+        num_required_melodic_circuits_per_pitch = 7 # 27 for third-species
+        num_required_harmonic_circuits_per_pitch = 6
 
         # input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
@@ -98,7 +112,7 @@ def toy_piano_counterpoint():
                         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - char_idx])
 
                 input_qc.extend(rot_melodic_circuit)
-                qp.add_circuit(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'), input_qc)
+                qp.add_circuit(qubit_string + "_m_" + format(melodic_circuit_idx, '02'), input_qc)
 
                 # print(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'))
                 # print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
@@ -118,7 +132,7 @@ def toy_piano_counterpoint():
                         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - idx])
 
                 input_qc.extend(rot_harmonic_circuit)
-                qp.add_circuit(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'), input_qc)
+                qp.add_circuit(qubit_string + "_h_" + format(harmonic_circuit_idx, '02'), input_qc)
 
                 # print(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'))
                 # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
@@ -135,8 +149,11 @@ def toy_piano_counterpoint():
 
         for circuit_name in qp.get_circuit_names():
             print(circuit_name)
-            print(sim_result.get_counts(circuit_name))
-            print()
+            bitstr = list(sim_result.get_counts(circuit_name).keys())[0]
+            res_dict[circuit_name[0:CIRCUIT_RESULT_KEY_LENGTH]].append(bitstr)
+            print(bitstr)
+
+        print(res_dict)
 
         harmony_notes_factor = 2**(species - 1)  # Number of harmony notes for each melody note
         num_composition_bits = TOTAL_MELODY_NOTES * (harmony_notes_factor + 1) * NUM_CIRCUIT_WIRES
