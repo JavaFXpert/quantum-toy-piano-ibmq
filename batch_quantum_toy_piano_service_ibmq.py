@@ -70,6 +70,10 @@ def toy_piano_counterpoint():
             1 <= species <= 3 and
             0 <= pitch_index < NUM_PITCHES):
 
+        circuit_dict = {}  # Key is circuit name, value is circuit
+
+
+
         res_dict = dict()
         res_dict['000_m'] = deque([])
         res_dict['000_h'] = deque([])
@@ -114,6 +118,7 @@ def toy_piano_counterpoint():
 
                 input_qc.extend(rot_melodic_circuit)
                 qp.add_circuit(qubit_string + "_m_" + format(melodic_circuit_idx, '02'), input_qc)
+                circuit_dict[qubit_string + "_m_" + format(melodic_circuit_idx, '02')] = input_qc
 
                 # print(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'))
                 # print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
@@ -138,7 +143,8 @@ def toy_piano_counterpoint():
                 # print(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'))
                 # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
 
-        # print(qp.get_circuit_names())
+        print(qp.get_circuit_names())
+        print(circuit_dict)
 
         if use_simulator:
             quantum_backend = "local_qasm_simulator"
@@ -146,14 +152,20 @@ def toy_piano_counterpoint():
             # TODO: Modify to use real quantum chip
             quantum_backend = "ibmqx4"
 
-        sim_result = qp.execute(qp.get_circuit_names(), backend=quantum_backend, shots=1)
+        # sim_result = qp.execute(qp.get_circuit_names(), backend=quantum_backend, shots=1)
+        job = execute(circuit_dict.values(), quantum_backend, shots=1)
 
-        # while not sim_result.done:
-        #     time.sleep(30)
+        job_result = job.result()
 
-        for circuit_name in qp.get_circuit_names():
+        if use_simulator:
+            while not job.done:
+                time.sleep(30)
+
+        # for circuit_name in qp.get_circuit_names():
+        for circuit_name in circuit_dict.keys():
             print(circuit_name)
-            bitstr = list(sim_result.get_counts(circuit_name).keys())[0]
+            bitstr = list(job_result.get_counts(circuit_dict[circuit_name]).keys())[0]
+            # bitstr = list(sim_result.get_counts(circuit_name).keys())[0]
             res_dict[circuit_name[0:CIRCUIT_RESULT_KEY_LENGTH]].append(bitstr)
             print(bitstr)
 
