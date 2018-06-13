@@ -84,8 +84,6 @@ def toy_piano_counterpoint():
         res_dict['011_m'] = deque([])
         res_dict['011_h'] = deque([])
 
-        # first = res_dict[tmpin].popleft()
-
         q_reg = QuantumRegister(3)
         c_req = ClassicalRegister(3)
 
@@ -94,8 +92,6 @@ def toy_piano_counterpoint():
 
         qc_harmonic = QuantumCircuit(q_reg, c_req)
         rot_harmonic_circuit = compute_circuit(harmonic_degrees, q_reg, c_req, qc_harmonic)
-
-        qp = QuantumProgram()
 
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
@@ -106,7 +102,7 @@ def toy_piano_counterpoint():
         for pitch_idx in range(0, NUM_PITCHES):
             for melodic_circuit_idx in range(0, num_required_melodic_circuits_per_pitch):
                 input_qc = QuantumCircuit(q_reg, c_req)
-                qubit_string = format(pitch_idx, '03b') # Must match NUM_CIRCUIT_WIRES
+                qubit_string = format(pitch_idx, '03b') # TODO: Use NUM_CIRCUIT_WIRES in format string
 
                 # print (qubit_string + ":" + str(melodic_circuit_idx))
 
@@ -117,33 +113,31 @@ def toy_piano_counterpoint():
                         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - char_idx])
 
                 input_qc.extend(rot_melodic_circuit)
-                qp.add_circuit(qubit_string + "_m_" + format(melodic_circuit_idx, '02'), input_qc)
                 circuit_dict[qubit_string + "_m_" + format(melodic_circuit_idx, '02')] = input_qc
 
-                # print(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02'))
+                # TODO: Modify console output below to print circuit from circuit_dict
                 # print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
 
         input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
             for harmonic_circuit_idx in range(0, num_required_harmonic_circuits_per_pitch):
                 input_qc = QuantumCircuit(q_reg, c_req)
-                qubit_string = format(pitch_idx, '03b') # Must match NUM_CIRCUIT_WIRES
+                qubit_string = format(pitch_idx, '03b') # TODO: Use NUM_CIRCUIT_WIRES in format string
 
                 # print (qubit_string + ":" + str(harmonic_circuit_idx))
 
-                for idx, qubit_char in enumerate(qubit_string):
-                    if qubit_char == '0':
-                        input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - idx])
+                for char_idx in range(NUM_CIRCUIT_WIRES):
+                    if qubit_string[char_idx] == '0':
+                        input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - char_idx])
                     else:
-                        input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - idx])
+                        input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - char_idx])
 
                 input_qc.extend(rot_harmonic_circuit)
-                qp.add_circuit(qubit_string + "_h_" + format(harmonic_circuit_idx, '02'), input_qc)
+                circuit_dict[qubit_string + "_h_" + format(harmonic_circuit_idx, '02')] = input_qc
 
-                # print(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02'))
+                # TODO: Modify console output below to print circuit from circuit_dict
                 # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
 
-        print(qp.get_circuit_names())
         print(circuit_dict)
 
         if use_simulator:
@@ -152,7 +146,6 @@ def toy_piano_counterpoint():
             # TODO: Modify to use real quantum chip
             quantum_backend = "ibmqx4"
 
-        # sim_result = qp.execute(qp.get_circuit_names(), backend=quantum_backend, shots=1)
         job = execute(circuit_dict.values(), quantum_backend, shots=1)
 
         job_result = job.result()
@@ -161,7 +154,6 @@ def toy_piano_counterpoint():
             while not job.done:
                 time.sleep(30)
 
-        # for circuit_name in qp.get_circuit_names():
         for circuit_name in circuit_dict.keys():
             print(circuit_name)
             bitstr = list(job_result.get_counts(circuit_dict[circuit_name]).keys())[0]
@@ -187,16 +179,13 @@ def toy_piano_counterpoint():
 
         num_runs = 1
 
+        # Compute notes for the main melody
         for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
             #
             if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
                 res_dict_key = ""
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
-                    # if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
-                    #     input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-                    # else:
-                    #     input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
 
                 res_dict_key += "_m"
                 bitstr = res_dict[res_dict_key].popleft()
@@ -209,61 +198,40 @@ def toy_piano_counterpoint():
 
                 print(res_dict)
 
-            # # Now compute a harmony note for the melody note
-            # #print("Now compute a harmony note for the melody note")
-            # qp = QuantumProgram()
-            # input_qc = QuantumCircuit(q_reg, c_req)
-            #
-            # for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-            #     if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
-            #         input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-            #     else:
-            #         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-            #
-            # input_qc.extend(rot_harmonic_circuit)
-            # qp.add_circuit("complete_rot_harmonic", input_qc)
-            #
-            # print("----complete_rot_harmonic----")
-            # # print(qp.get_qasm("complete_rot_harmonic"))
-            # # print("----end complete_rot_harmonic----")
-            #
-            # sim_result = qp.execute(backend=quantum_backend, shots=1)
-            # bitstr = list(sim_result.get_counts("complete_rot_harmonic").keys())[0]
-            #
-            # for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-            #     composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-            #                      (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
-            #
-            # measured_pitch = int(bitstr, 2)
-            #
-            # # Now compute melody notes to follow the harmony note
-            # #print("Now compute melody notes to follow the harmony note")
-            # for harmony_note_idx in range(1, harmony_notes_factor):
-            #     qp = QuantumProgram()
-            #     input_qc = QuantumCircuit(q_reg, c_req)
-            #
-            #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-            #         if (composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-            #                              ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
-            #                              (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] == 0):
-            #             input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-            #         else:
-            #             input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-            #
-            #     input_qc.extend(rot_melodic_circuit)
-            #     qp.add_circuit("complete_rot_melodic_b", input_qc)
-            #
-            #     print("----complete_rot_melodic_b----")
-            #     # print(qp.get_qasm("complete_rot_melodic_b"))
-            #     # print("----end complete_rot_melodic_b----")
-            #
-            #     sim_result = qp.execute(backend=quantum_backend, shots=1)
-            #     bitstr = list(sim_result.get_counts("complete_rot_melodic_b").keys())[0]
-            #
-            #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-            #         composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-            #                           ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
-            #                          (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
+            # Now compute a harmony note for the melody note
+            res_dict_key = ""
+            for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
+
+            res_dict_key += "_h"
+            bitstr = res_dict[res_dict_key].popleft()
+
+            print("har res_dict_key bitstr:")
+            print(res_dict_key + "_" + bitstr)
+
+            for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+                                 (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
+
+            print(res_dict)
+
+            # Now compute melody notes to follow the harmony note
+            res_dict_key = ""
+            for harmony_note_idx in range(1, harmony_notes_factor):
+
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                    res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
+
+                res_dict_key += "_m"
+                bitstr = res_dict[res_dict_key].popleft()
+
+                print("melb res_dict_key bitstr:")
+                print(res_dict_key + "_" + bitstr)
+
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                    composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+                                      ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
+                                     (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
         all_note_nums = create_note_nums_array(composition_bits)
         melody_note_nums = all_note_nums[0:TOTAL_MELODY_NOTES]
@@ -272,7 +240,7 @@ def toy_piano_counterpoint():
     if use_simulator:
         composer = "IBM Quantum Simulator"
     else:
-        composer = "IBM Q 16 Rueschlikon"
+        composer = "IBM Q 5 Tenerife"
 
     ret_dict = {"melody": melody_note_nums,
                 "harmony": harmony_note_nums,
