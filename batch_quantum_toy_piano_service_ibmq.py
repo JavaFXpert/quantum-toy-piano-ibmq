@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request
 import copy
 from s04_rotcircuit_ibmq import *
 from collections import deque
+import time
 
 from qiskit import register
 import Qconfig
@@ -147,6 +148,9 @@ def toy_piano_counterpoint():
 
         sim_result = qp.execute(qp.get_circuit_names(), backend=quantum_backend, shots=1)
 
+        # while not sim_result.done:
+        #     time.sleep(30)
+
         for circuit_name in qp.get_circuit_names():
             print(circuit_name)
             bitstr = list(sim_result.get_counts(circuit_name).keys())[0]
@@ -160,100 +164,94 @@ def toy_piano_counterpoint():
 
         composition_bits = [0] * num_composition_bits
 
-        # # Convert the pitch index to a binary string, and place into the
-        # # composition_bits array, least significant bits in lowest elements of array
-        # qubit_string = format(pitch_index, '03b')
-        # for idx, qubit_char in enumerate(qubit_string):
-        #     if qubit_char == '0':
-        #         composition_bits[idx] = 0
-        #     else:
-        #         composition_bits[idx] = 1
-        #
-        # num_runs = 1
-        #
-        # for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
-        #     #
-        #     if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
-        #         qp = QuantumProgram()
-        #         input_qc = QuantumCircuit(q_reg, c_req)
-        #
-        #         for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #             if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
-        #                 input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #             else:
-        #                 input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #
-        #         input_qc.extend(rot_melodic_circuit)
-        #         qp.add_circuit("complete_rot_melodic", input_qc)
-        #
-        #         print("----complete_rot_melodic----")
-        #         # print(qp.get_qasm("complete_rot_melodic"))
-        #         # print("----end complete_rot_melodic----")
-        #
-        #         sim_result = qp.execute(backend = quantum_backend, shots = 1)
-        #         bitstr = list(sim_result.get_counts("complete_rot_melodic").keys())[0]
-        #         for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #             composition_bits[(melody_note_idx + 1) * NUM_CIRCUIT_WIRES + bit_idx] = int(bitstr[bit_idx])
-        #
-        #         measured_pitch = int(bitstr, 2)
-        #
-        #     # Now compute a harmony note for the melody note
-        #     #print("Now compute a harmony note for the melody note")
-        #     qp = QuantumProgram()
-        #     input_qc = QuantumCircuit(q_reg, c_req)
-        #
-        #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #         if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
-        #             input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #         else:
-        #             input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #
-        #     input_qc.extend(rot_harmonic_circuit)
-        #     qp.add_circuit("complete_rot_harmonic", input_qc)
-        #
-        #     print("----complete_rot_harmonic----")
-        #     # print(qp.get_qasm("complete_rot_harmonic"))
-        #     # print("----end complete_rot_harmonic----")
-        #
-        #     sim_result = qp.execute(backend=quantum_backend, shots=1)
-        #     bitstr = list(sim_result.get_counts("complete_rot_harmonic").keys())[0]
-        #
-        #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #         composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-        #                          (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
-        #
-        #     measured_pitch = int(bitstr, 2)
-        #
-        #     # Now compute melody notes to follow the harmony note
-        #     #print("Now compute melody notes to follow the harmony note")
-        #     for harmony_note_idx in range(1, harmony_notes_factor):
-        #         qp = QuantumProgram()
-        #         input_qc = QuantumCircuit(q_reg, c_req)
-        #
-        #         for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #             if (composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-        #                                  ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
-        #                                  (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] == 0):
-        #                 input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #             else:
-        #                 input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
-        #
-        #         input_qc.extend(rot_melodic_circuit)
-        #         qp.add_circuit("complete_rot_melodic_b", input_qc)
-        #
-        #         print("----complete_rot_melodic_b----")
-        #         # print(qp.get_qasm("complete_rot_melodic_b"))
-        #         # print("----end complete_rot_melodic_b----")
-        #
-        #         sim_result = qp.execute(backend=quantum_backend, shots=1)
-        #         bitstr = list(sim_result.get_counts("complete_rot_melodic_b").keys())[0]
-        #
-        #         for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-        #             composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
-        #                               ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
-        #                              (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
-        #
-        #         measured_pitch = int(bitstr, 2)
+        # Convert the pitch index to a binary string, and place into the
+        # composition_bits array, least significant bits in lowest elements of array
+        qubit_string = format(pitch_index, '03b')
+        for idx, qubit_char in enumerate(qubit_string):
+            if qubit_char == '0':
+                composition_bits[idx] = 0
+            else:
+                composition_bits[idx] = 1
+
+        num_runs = 1
+
+        for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
+            #
+            if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
+                res_dict_key = ""
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                    res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
+                    # if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
+                    #     input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+                    # else:
+                    #     input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+
+                res_dict_key += "_m"
+                bitstr = res_dict[res_dict_key].popleft()
+
+                print("mel res_dict_key bitstr:")
+                print(res_dict_key + "_" + bitstr)
+
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                    composition_bits[(melody_note_idx + 1) * NUM_CIRCUIT_WIRES + bit_idx] = int(bitstr[bit_idx])
+
+                print(res_dict)
+
+            # # Now compute a harmony note for the melody note
+            # #print("Now compute a harmony note for the melody note")
+            # qp = QuantumProgram()
+            # input_qc = QuantumCircuit(q_reg, c_req)
+            #
+            # for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+            #     if (composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx] == 0):
+            #         input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+            #     else:
+            #         input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+            #
+            # input_qc.extend(rot_harmonic_circuit)
+            # qp.add_circuit("complete_rot_harmonic", input_qc)
+            #
+            # print("----complete_rot_harmonic----")
+            # # print(qp.get_qasm("complete_rot_harmonic"))
+            # # print("----end complete_rot_harmonic----")
+            #
+            # sim_result = qp.execute(backend=quantum_backend, shots=1)
+            # bitstr = list(sim_result.get_counts("complete_rot_harmonic").keys())[0]
+            #
+            # for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+            #     composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+            #                      (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
+            #
+            # measured_pitch = int(bitstr, 2)
+            #
+            # # Now compute melody notes to follow the harmony note
+            # #print("Now compute melody notes to follow the harmony note")
+            # for harmony_note_idx in range(1, harmony_notes_factor):
+            #     qp = QuantumProgram()
+            #     input_qc = QuantumCircuit(q_reg, c_req)
+            #
+            #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+            #         if (composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+            #                              ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
+            #                              (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] == 0):
+            #             input_qc.iden(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+            #         else:
+            #             input_qc.x(q_reg[NUM_CIRCUIT_WIRES - 1 - bit_idx])
+            #
+            #     input_qc.extend(rot_melodic_circuit)
+            #     qp.add_circuit("complete_rot_melodic_b", input_qc)
+            #
+            #     print("----complete_rot_melodic_b----")
+            #     # print(qp.get_qasm("complete_rot_melodic_b"))
+            #     # print("----end complete_rot_melodic_b----")
+            #
+            #     sim_result = qp.execute(backend=quantum_backend, shots=1)
+            #     bitstr = list(sim_result.get_counts("complete_rot_melodic_b").keys())[0]
+            #
+            #     for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+            #         composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+            #                           ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
+            #                          (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
         all_note_nums = create_note_nums_array(composition_bits)
         melody_note_nums = all_note_nums[0:TOTAL_MELODY_NOTES]
