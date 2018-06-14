@@ -95,8 +95,8 @@ def toy_piano_counterpoint():
 
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
-        num_required_melodic_circuits_per_pitch = 7 # 27 for third-species
-        num_required_harmonic_circuits_per_pitch = 6
+        num_required_melodic_circuits_per_pitch = 9 # 6 for first, 16 for second, 27 for third-species
+        num_required_harmonic_circuits_per_pitch = 7
 
         # input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
@@ -142,9 +142,10 @@ def toy_piano_counterpoint():
 
         if use_simulator:
             quantum_backend = "local_qasm_simulator"
+            composer = "IBM Quantum Simulator"
         else:
-            # TODO: Modify to use real quantum chip
             quantum_backend = "ibmqx4"
+            composer = "IBM Q 5 Tenerife"
 
         job = execute(circuit_dict.values(), quantum_backend, shots=1)
 
@@ -216,11 +217,13 @@ def toy_piano_counterpoint():
             print(res_dict)
 
             # Now compute melody notes to follow the harmony note
-            res_dict_key = ""
             for harmony_note_idx in range(1, harmony_notes_factor):
 
+                res_dict_key = ""
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
-                    res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
+                    res_dict_key += str(composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
+                                         ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
+                                         (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx])
 
                 res_dict_key += "_m"
                 bitstr = res_dict[res_dict_key].popleft()
@@ -233,14 +236,11 @@ def toy_piano_counterpoint():
                                       ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
                                      (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
+                print(res_dict)
+
         all_note_nums = create_note_nums_array(composition_bits)
         melody_note_nums = all_note_nums[0:TOTAL_MELODY_NOTES]
         harmony_note_nums = all_note_nums[7:num_composition_bits]
-
-    if use_simulator:
-        composer = "IBM Quantum Simulator"
-    else:
-        composer = "IBM Q 5 Tenerife"
 
     ret_dict = {"melody": melody_note_nums,
                 "harmony": harmony_note_nums,
