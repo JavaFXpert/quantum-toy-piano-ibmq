@@ -63,6 +63,7 @@ def toy_piano_counterpoint():
     harmonic_degrees = request.args['harmonic_degrees'].split(",")
 
     use_simulator = request.args['use_simulator'].lower() == "true"
+    print()
     print("use_simulator: ", use_simulator)
 
     if (len(melodic_degrees) == DEGREES_OF_FREEDOM and
@@ -95,7 +96,8 @@ def toy_piano_counterpoint():
 
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
-        num_required_melodic_circuits_per_pitch = 9 # 6 for first, 16 for second, 27 for third-species
+        # Note: 11 melody, 7 harmony is currently a small enough batch for IBMQ devices
+        num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
         num_required_harmonic_circuits_per_pitch = 7
 
         # input_pitch = 0
@@ -138,14 +140,14 @@ def toy_piano_counterpoint():
                 # TODO: Modify console output below to print circuit from circuit_dict
                 # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
 
-        print(circuit_dict)
+        # print(circuit_dict)
 
         if use_simulator:
             quantum_backend = "local_qasm_simulator"
             composer = "IBM Quantum Simulator"
         else:
-            quantum_backend = "ibmqx4"
-            composer = "IBM Q 5 Tenerife"
+            quantum_backend = "ibmqx4" # "ibmqx5"
+            composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
 
         job = execute(circuit_dict.values(), quantum_backend, shots=1)
 
@@ -156,11 +158,11 @@ def toy_piano_counterpoint():
                 time.sleep(30)
 
         for circuit_name in circuit_dict.keys():
-            print(circuit_name)
+            # print(circuit_name)
             bitstr = list(job_result.get_counts(circuit_dict[circuit_name]).keys())[0]
             # bitstr = list(sim_result.get_counts(circuit_name).keys())[0]
             res_dict[circuit_name[0:CIRCUIT_RESULT_KEY_LENGTH]].append(bitstr)
-            print(bitstr)
+            # print(bitstr)
 
         print(res_dict)
 
@@ -184,59 +186,69 @@ def toy_piano_counterpoint():
         for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
             #
             if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
-                res_dict_key = ""
-                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                # Zero the most-significant bit in case is 1 due to a noisy circuit
+                res_dict_key = "0"
+                for bit_idx in range(1, NUM_CIRCUIT_WIRES):
                     res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
 
                 res_dict_key += "_m"
                 bitstr = res_dict[res_dict_key].popleft()
 
-                print("mel res_dict_key bitstr:")
-                print(res_dict_key + "_" + bitstr)
+                # print("mel res_dict_key bitstr:")
+                # print(res_dict_key + "_" + bitstr)
 
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     composition_bits[(melody_note_idx + 1) * NUM_CIRCUIT_WIRES + bit_idx] = int(bitstr[bit_idx])
 
-                print(res_dict)
+                # print(res_dict)
 
             # Now compute a harmony note for the melody note
-            res_dict_key = ""
-            for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+            # Zero the most-significant bit in case is 1 due to a noisy circuit
+            res_dict_key = "0"
+            for bit_idx in range(1, NUM_CIRCUIT_WIRES):
                 res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
 
             res_dict_key += "_h"
             bitstr = res_dict[res_dict_key].popleft()
 
-            print("har res_dict_key bitstr:")
-            print(res_dict_key + "_" + bitstr)
+            # print("har res_dict_key bitstr:")
+            # print(res_dict_key + "_" + bitstr)
 
             for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                 composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                  (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
-            print(res_dict)
+            # print(res_dict)
 
             # Now compute melody notes to follow the harmony note
             for harmony_note_idx in range(1, harmony_notes_factor):
 
-                res_dict_key = ""
-                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
+                # Zero the most-significant bit in case is 1 due to a noisy circuit
+                res_dict_key = "0"
+                for bit_idx in range(1, NUM_CIRCUIT_WIRES):
                     res_dict_key += str(composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                          ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
                                          (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx])
 
                 res_dict_key += "_m"
-                bitstr = res_dict[res_dict_key].popleft()
 
-                print("melb res_dict_key bitstr:")
-                print(res_dict_key + "_" + bitstr)
+                # Insert a treble-clef C if no more measurements for given note to be popped
+                if res_dict[res_dict_key]:
+                    bitstr = res_dict[res_dict_key].popleft()
+                else:
+                    print("Queue " + res_dict_key + " is empty" )
+                    bitstr = "111"
+
+                # print("melb res_dict_key bitstr:")
+                # print(res_dict_key + "_" + bitstr)
 
                 for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                       ((harmony_note_idx) * NUM_CIRCUIT_WIRES) +
                                      (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx] = int(bitstr[bit_idx])
 
-                print(res_dict)
+        print()
+        print(res_dict)
 
         all_note_nums = create_note_nums_array(composition_bits)
         melody_note_nums = all_note_nums[0:TOTAL_MELODY_NOTES]
