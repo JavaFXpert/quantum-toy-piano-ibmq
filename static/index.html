@@ -54,6 +54,17 @@
                         :colnames="gridColNames"
                         :mathmatrix="desiredMelodyMatrix.valueOf()">
                     </stochastic-matrix>
+                    <v-container>
+                      <p>In the <a href="https://en.wikipedia.org/wiki/Doubly_stochastic_matrix" target="_blank">
+                          doubly-stochastic matrix</a> above, enter your desired probabilities for each pitch
+                          in the column heading to follow each pitch in the row heading.
+                          Make the total for each row and column add up to 1, and click the Optimize button.
+                          The <a href="https://en.wikipedia.org/wiki/Unistochastic_matrix" target="_blank">
+                          unistochastic matrix</a> on the right will then contain a unitary matrix that approximates
+                          your desired probabilities. To see the underlying amplitudes, de-selected the
+                          Show Probabilities checkbox.
+                      </p>
+                    </v-container>
                   </v-flex>
                   <v-flex xs6>
                     <unistochastic-matrix
@@ -78,6 +89,17 @@
                         :colnames="gridColNames"
                         :mathmatrix="desiredHarmonyMatrix.valueOf()">
                     </stochastic-harmony-matrix>
+                    <v-container>
+                      <p>In the <a href="https://en.wikipedia.org/wiki/Doubly_stochastic_matrix" target="_blank">
+                          doubly-stochastic matrix</a> above, enter your desired probabilities for each pitch
+                          in the column heading to be played with each pitch in the row heading.
+                          Make the total for each row and column add up to 1, and click the Optimize button.
+                          The <a href="https://en.wikipedia.org/wiki/Unistochastic_matrix" target="_blank">
+                          unistochastic matrix</a> on the right will then contain a unitary matrix that approximates
+                          your desired probabilities. To see the underlying amplitudes, de-selected the
+                          Show Probabilities checkbox.
+                      </p>
+                    </v-container>
                   </v-flex>
                   <v-flex xs6>
                     <unistochastic-harmony-matrix

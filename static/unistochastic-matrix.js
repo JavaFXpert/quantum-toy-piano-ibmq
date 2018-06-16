@@ -79,7 +79,9 @@ Vue.component('unistochastic-matrix', {
       '<div class="ml-2">' +
         '<button @click="optimizerotationangles" class="mr-4">Optimize</button>' +
         '<input type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni"/>' +
-        '<label for="unistochastic" class="mr-4">Show Probabilities</label>' +
+        '<label for="unistochastic" class="mr-4">&nbsp;Show Probabilities</label>' +
+
+        // UNCOMMENT THE FOLLOWING LINES TO MAKE THE FINE TUNING CONTROLS APPEAR
         // '<label>Zeros penalty factor:</label>' +
         // '<input type="range" v-model="rv.zeroelementpenaltyfactor" min="0.0" max="1.0" step="0.1"/>' +
         // '<span>{{rv.zeroelementpenaltyfactor}}</span><br/>' +
@@ -93,6 +95,7 @@ Vue.component('unistochastic-matrix', {
         //   '{{" = Euclidean distance: " + Math.round(rv.euclideandistance * 100) / 100}}' +
         //   '{{" + Zeros distance penalty: " + Math.round(rv.addedpenalty * 100) / 100 }}' +
         // '</span>' +
+
       '</div>' +
       '<br/>' +
       '<table>' +
