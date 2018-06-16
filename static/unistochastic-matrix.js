@@ -77,7 +77,7 @@ Vue.component('unistochastic-matrix', {
       '</table>' +
       '<br/>' +
       '<div class="ml-2">' +
-        '<button @click="optimizerotationangles" class="mr-4">Optimize</button>' +
+        '<button @click="optimizerotationangles" class="mr-4">Optimize Rotations</button>' +
         '<input type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni"/>' +
         '<label for="unistochastic" class="mr-4">&nbsp;Show Probabilities</label>' +
 
@@ -98,6 +98,7 @@ Vue.component('unistochastic-matrix', {
 
       '</div>' +
       '<br/>' +
+      '<label>Degree of Freedom Rotations:</label>' +
       '<table>' +
         '<tbody>' +
           '<tr v-for="(srow, srowIdx) in 3">' +
