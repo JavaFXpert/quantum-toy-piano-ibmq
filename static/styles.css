@@ -186,7 +186,7 @@ button:hover {
   -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
   width: 44px;
-  height: 300px;
+  height: 200px;
   border: solid 1px #eee;
   -webkit-transform: translate(-3px, -3px);
   transform: translate(-3px, -3px);
@@ -205,7 +205,7 @@ button:hover {
   position: absolute;
   top: 0px;
   width: 22px;
-  height: 165px;
+  height: 120px;
   background-color: #585858;
   margin-left: -11px;
   margin-right: -11px;

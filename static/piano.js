@@ -7,7 +7,6 @@ for(var i=0;i<soundpack_index.length;i++){
     //url: "https://awiclass.monoame.com/pianosound/set/"+ soundpack_index[i]+".wav"
     url: "piano-sounds/"+ soundpack_index[i]+".wav"
   });
-
 }
 
 var vm = Vue.component('piano-component', {
@@ -24,10 +23,10 @@ var vm = Vue.component('piano-component', {
         '<div class="keyboard">' +
           '<div class="pianokey" v-for="s in display_keys">' +
             '<div class="white" v-if="s.type==&quot;white&quot;" @click="addnote(s.num)" :class="get_current_highlight(s.num,s.key)?&quot;playing&quot;:&quot;&quot;">' +
-              '<div class="label">{{String.fromCharCode(s.key)}}</div>' +
+              // '<div class="label">{{String.fromCharCode(s.key)}}</div>' +
             '</div>' +
             '<div class="black" v-if="s.type==&quot;black&quot;" @click="addnote(s.num)" :class="get_current_highlight(s.num,s.key)?&quot;playing&quot;:&quot;&quot;">' +
-              '<div class="label">{{String.fromCharCode(s.key)}}</div>' +
+              // '<div class="label">{{String.fromCharCode(s.key)}}</div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -35,7 +34,7 @@ var vm = Vue.component('piano-component', {
       '<div class="controls">' +
         '<ul class="notes_list" v-if="notes.length&gt;0">' +
           '<li v-for="(note,id) in notes" :class="now_note_id-1==id?&quot;playing&quot;:&quot;&quot;">' +
-            '<div class="num">{{note.num}}</div>' +
+            '<div class="num">{{pitches[note.num - 1]}}</div>' +
             '<div class="time">{{note.time}}</div>' +
           '</li>' +
         '</ul>' +
@@ -98,7 +97,8 @@ var vm = Vue.component('piano-component', {
         {num: 13.5, key: 55, type: 'black'},
         {num: 14, key: 85, type: 'white'},
         {num: 15, key: 73, type: 'white'}
-      ]
+      ],
+      pitches: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'', 'C\'\'']
     }
   },
   methods: {

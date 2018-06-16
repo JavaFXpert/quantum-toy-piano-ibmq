@@ -100,8 +100,8 @@ Vue.component('unistochastic-matrix', {
           '<tr v-for="(srow, srowIdx) in 3">' +
             '<td v-for="(scol, scolIdx) in 2">' +
               '<label>{{rv.rotationangles [(srowIdx) * 2 + (scolIdx)].label}}</label>' +
-              //'<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -rv.degreedecimals)" class="rot-slider">' +
-              '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
+              '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -rv.degreedecimals)" class="rot-slider">' +
+              // '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
             '</td>' +
           '</tr>' +
         '</tbody>' +
