@@ -170,7 +170,7 @@ var vm = Vue.component('piano-component', {
       this.playnote(id,1);
     },
     request_counterpoint: function(species_arg) {
-      var quantum_music_host = "http://localhost:5000";
+      var quantum_music_host = "http://localhost:5002";
       harmonyDegrees = [];
       melodyDegrees = [];
       for (var idx = 0; idx < rotationDegOfFreedom; idx++) {

@@ -358,4 +358,5 @@ def create_toy_piano(melody_note_nums, harmony_note_nums):
     return sorted_notes
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    app.run(host='127.0.0.1', port=5002)
