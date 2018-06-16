@@ -48,20 +48,20 @@
               <v-container fluid>
                 <v-layout row wrap>
                   <v-flex xs6>
-                    <unistochastic-matrix
-                        :numrowscols="gridNumRowsCols"
-                        :rownames="gridRowNames"
-                        :colnames="gridColNames"
-                        :wantedmatrix="desiredMelodyMatrix">
-                    </unistochastic-matrix>
-                  </v-flex>
-                  <v-flex xs6>
                     <stochastic-matrix
                         :numrowscols="gridNumRowsCols"
                         :rownames="gridRowNames"
                         :colnames="gridColNames"
                         :mathmatrix="desiredMelodyMatrix.valueOf()">
                     </stochastic-matrix>
+                  </v-flex>
+                  <v-flex xs6>
+                    <unistochastic-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :wantedmatrix="desiredMelodyMatrix">
+                    </unistochastic-matrix>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -72,14 +72,6 @@
               <v-container fluid>
                 <v-layout row wrap>
                   <v-flex xs6>
-                    <unistochastic-harmony-matrix
-                        :numrowscols="gridNumRowsCols"
-                        :rownames="gridRowNames"
-                        :colnames="gridColNames"
-                        :wantedmatrix="desiredHarmonyMatrix">
-                    </unistochastic-harmony-matrix>
-                  </v-flex>
-                  <v-flex xs6>
                     <stochastic-harmony-matrix
                         :numrowscols="gridNumRowsCols"
                         :rownames="gridRowNames"
@@ -87,11 +79,19 @@
                         :mathmatrix="desiredHarmonyMatrix.valueOf()">
                     </stochastic-harmony-matrix>
                   </v-flex>
+                  <v-flex xs6>
+                    <unistochastic-harmony-matrix
+                        :numrowscols="gridNumRowsCols"
+                        :rownames="gridRowNames"
+                        :colnames="gridColNames"
+                        :wantedmatrix="desiredHarmonyMatrix">
+                    </unistochastic-harmony-matrix>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-tab-item>
 
-            <v-tab>Piano</v-tab>
+            <v-tab>Compose & Play</v-tab>
             <v-tab-item>
               <v-container fluid>
                 <div id="piano">
@@ -136,15 +136,15 @@
 
         desiredHarmonyMatrix: math.matrix(
 //            C4   D4   E4   F4
-          [ [.10, .10, .70, .10],   //C4
-            [.10, .10, .10, .70],   //D4
-            [.70, .10, .10, .10],   //E4
-            [.10, .70, .10, .10]]), //F4
+//           [ [.10, .10, .70, .10],   //C4
+//             [.10, .10, .10, .70],   //D4
+//             [.70, .10, .10, .10],   //E4
+//             [.10, .70, .10, .10]]), //F4
 
-          // [ [.00, .00, 1.0, .00],   //C4
-          //   [.00, .00, .00, 1.0],   //D4
-          //   [1.0, .00, .00, .00],   //E4
-          //   [.00, 1.0, .00, .00]]), //F4
+          [ [.00, .00, 1.0, .00],   //C4
+            [.00, .00, .00, 1.0],   //D4
+            [1.0, .00, .00, .00],   //E4
+            [.00, 1.0, .00, .00]]), //F4
       }
     })
   </script>

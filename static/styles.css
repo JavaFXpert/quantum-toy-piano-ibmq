@@ -169,6 +169,8 @@ button:hover {
 }
 
 .white.playing {
+  -webkit-box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
   background-color: #d5d5d5;
   -webkit-transform: translate(0px, 0px);
   transform: translate(0px, 0px);
@@ -181,6 +183,8 @@ button:hover {
 }
 
 .white {
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
   width: 44px;
   height: 300px;
   border: solid 1px #eee;
@@ -190,6 +194,8 @@ button:hover {
   transition: 0.1s;
 }
 .white:hover {
+  -webkit-box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
   -webkit-transform: translate(0px, 0px);
   transform: translate(0px, 0px);
   background-color: #eee;

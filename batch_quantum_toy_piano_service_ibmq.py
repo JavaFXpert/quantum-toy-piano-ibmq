@@ -192,7 +192,13 @@ def toy_piano_counterpoint():
                     res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
 
                 res_dict_key += "_m"
-                bitstr = res_dict[res_dict_key].popleft()
+
+                # Insert a treble-clef C if no more measurements for given note to be popped
+                if res_dict[res_dict_key]:
+                    bitstr = res_dict[res_dict_key].popleft()
+                else:
+                    print("Queue " + res_dict_key + " is empty" )
+                    bitstr = "111"
 
                 # print("mel res_dict_key bitstr:")
                 # print(res_dict_key + "_" + bitstr)
