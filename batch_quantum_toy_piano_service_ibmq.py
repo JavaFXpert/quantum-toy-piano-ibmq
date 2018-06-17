@@ -151,7 +151,12 @@ def toy_piano_counterpoint():
             composer = "IBM Quantum Simulator"
         else:
             quantum_backend = lowest_pending_jobs()
-            composer = quantum_backend
+            if quantum_backend == "ibmqx4":
+                composer = "IBM Q 5 Tenerife"
+            elif quantum_backend == "ibmqx5":
+                composer = "IBM Q 16 Rueschlikon"
+            else:
+                composer = "IBM Quantum Computer"
 
             # quantum_backend = "ibmqx4" # "ibmqx5"
             # composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
