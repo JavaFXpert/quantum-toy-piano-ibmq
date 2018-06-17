@@ -1,5 +1,5 @@
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, QuantumProgram
-from qiskit import available_backends, execute
+from qiskit import available_backends, execute, compile, register, get_backend
 from math import *
 import numpy as np
 from flask import Flask, jsonify, request
@@ -9,10 +9,14 @@ from collections import deque
 import time
 
 from qiskit import register
-import Qconfig
 
-register(Qconfig.APItoken, Qconfig.config["url"])
-
+try:
+    import Qconfig
+    register(Qconfig.APItoken, Qconfig.config["url"])
+except:
+    print("""WARNING: There's no connection with the API for remote backends.
+                 Have you initialized a Qconfig.py file with your personal token?
+                 For now, there's only access to local simulator backends...""")
 
 app = Flask(__name__)
 
@@ -146,8 +150,11 @@ def toy_piano_counterpoint():
             quantum_backend = "local_qasm_simulator"
             composer = "IBM Quantum Simulator"
         else:
-            quantum_backend = "ibmqx4" # "ibmqx5"
-            composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
+            quantum_backend = lowest_pending_jobs()
+            composer = quantum_backend
+
+            # quantum_backend = "ibmqx4" # "ibmqx5"
+            # composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
 
         job = execute(circuit_dict.values(), quantum_backend, shots=1)
 
@@ -356,6 +363,17 @@ def create_toy_piano(melody_note_nums, harmony_note_nums):
     sorted_notes = sorted(notes, key=lambda k: k['time'])
 
     return sorted_notes
+
+def lowest_pending_jobs():
+    """Returns the backend with lowest pending jobs."""
+    list_of_backends = available_backends(
+        {'local': False, 'simulator': False})
+    device_status = [get_backend(backend).status
+                     for backend in list_of_backends]
+
+    best = min([x for x in device_status if x['available'] is True],
+               key=lambda x: x['pending_jobs'])
+    return best['name']
 
 if __name__ == '__main__':
     # app.run()
