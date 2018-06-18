@@ -158,6 +158,8 @@ def toy_piano_counterpoint():
             else:
                 composer = "IBM Quantum Computer"
 
+        print('quantum_backend: ', quantum_backend)
+
             # quantum_backend = "ibmqx4" # "ibmqx5"
             # composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
 
