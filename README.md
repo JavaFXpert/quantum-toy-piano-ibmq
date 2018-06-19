@@ -6,7 +6,7 @@ The Quantum Toy Piano application enables a user to compose music that is perfor
 
 FIG. 1. Music score captured from the performance of a quantum musical composition
 
-To create a quantum musical composition, the user first supplies the desired probabilities for a given pitch to follow another given pitch melodically. Take a moment to examine the music score in Fig. 1 and notice that the staff labeled **Melody** contains an eight-note melody, and realize that the staff labeled **Harmony** actually contains seven four-note melodies.  Users enter their desired probabilities into the [doubly-stochastic matrix](https://en.wikipedia.org/wiki/Doubly_stochastic_matrix) located on the left side of the **MELODY MATRICES** tab, shown in Fig 2. 
+To create a quantum musical composition, the user first supplies the desired probabilities for a given pitch to follow another given pitch melodically. Take a moment to examine the music score in Fig. 1 and notice that the staff labeled **Melody** contains an eight-note melody, and realize that the staff labeled **Harmony** actually contains seven four-note melodies.  Users enter their desired probabilities into the [doubly-stochastic matrix](https://en.wikipedia.org/wiki/Doubly_stochastic_matrix){:target="_blank"} located on the left side of the **MELODY MATRICES** tab, shown in Fig 2. 
 
 ![melody-tab-orthogonal-matrix](docimages/melody-tab-orthogonal-matrix.png)
 
