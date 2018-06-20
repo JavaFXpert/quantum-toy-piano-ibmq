@@ -1,8 +1,6 @@
 # Quantum Music Composer for IBM quantum computers
 
-The Quantum Music Composer application enables a user to compose music that is performed by a quantum computer. The musical *composition* consists of a series of quantum circuits. Each note in the *performance* of a composition is a quantum state, which when measured results in a [pitch][1] determined by quantum mechanical behavior. This normally results in unique melodies and harmonies each time a given composition is performed by the quantum computer. Fig. 1 contains a music score captured from one such performance.
-
-This is [an example][id] reference-style link.
+The Quantum Music Composer application enables a user to compose music that is performed by a quantum computer. The musical *composition* consists of a series of quantum circuits. Each note in the *performance* of a composition is a quantum state, which when measured results in a [pitch](#references) determined by quantum mechanical behavior. This normally results in unique melodies and harmonies each time a given composition is performed by the quantum computer. Fig. 1 contains a music score captured from one such performance.
 
 ![third-species-performance-ibmq](docimages/third-species-performance-ibmq.png)
 
@@ -36,7 +34,4 @@ To install.
 
 ## References
 
-[1]: Volkmar Putz and Karl Svozil, “Quantum music,” (2015), [ arXiv:1503.09045](https://arxiv.org/abs/1503.09045) [quant-ph]
-
-[id]: http://example.com/	"Optional Title Here"
-
+[1] Volkmar Putz and Karl Svozil, “Quantum music,” (2015), [ arXiv:1503.09045](https://arxiv.org/abs/1503.09045) [quant-ph]
