@@ -72,12 +72,16 @@ After clicking the OK button in the dialog in Fig. 7, you can hear the quantum c
 
 ## Installation
 
-To install Quantum Music Composer:
+To install and run Quantum Music Composer:
 
-1. Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
-2. Clone the [JavaFXpert/quantum-toy-piano-ibmq](JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
-3. Install the latest version of [Qiskit](https://qiskit.org/)
-4. 
+- Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
+- Clone the [JavaFXpert/quantum-toy-piano-ibmq](JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
+- Install the latest version of [Qiskit](https://qiskit.org/)
+- From the operating system prompt in the project's root directory, run:
+
+`python quantum_toy_piano_service_ibmq.py`
+
+- 
 
 ## References
 
