@@ -57,8 +57,9 @@ CIRCUIT_RESULT_KEY_LENGTH = 5 # '000_m' is such a key, for example
 @app.route('/toy_piano_counterpoint')
 def toy_piano_counterpoint():
     pitch_index = int(request.args['pitch_index'])
-    if (pitch_index >= NUM_PITCHES):
-        pitch_index %= (DIATONIC_SCALE_OCTAVE_PITCHES - 1)
+    pitch_index %= (DIATONIC_SCALE_OCTAVE_PITCHES - 1)
+    if pitch_index >= NUM_PITCHES:
+        pitch_index = 0
 
     species = int(request.args['species'])
 

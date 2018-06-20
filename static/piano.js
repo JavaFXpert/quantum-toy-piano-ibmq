@@ -49,11 +49,11 @@ var vm = Vue.component('piano-component', {
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
-          'target="_blank"> counterpoint species</a> to generate by clicking one of the Species' +
-          ' buttons above. When the dialog appears that contains a string representing the composition,' +
+          'target="_blank"> counterpoint species</a> to perform by clicking one of the Species' +
+          ' buttons above. When the dialog appears that contains a string representing the performance,' +
           ' you may optionally paste it into a Lilypond music score engraver. After clicking the OK' +
-          ' button, click the Play button to hear the music composed by you and the quantum computer' +
-          ' or simulator.</p>' +
+          ' button, click the Play button to hear a performance by the quantum computer or simulator' +
+          ' of the quantum music you composed.</p>' +
       '</div>' +
     '</div>',
   data: function () {
