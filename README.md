@@ -28,11 +28,11 @@ FIG. 3. User interface for composing quantum harmonic intervals
 
 
 
-The harmonic probabilities entered will apply to all of the notes played harmonically in the performance except for the final note on each staff, as those two notes will have the same pitch class as the first note in the melody staff. These notes provide a sense of resolution and finality to the performance, and are the only two notes in the performance that aren't determined by the quantum computer.
+The harmonic probabilities entered will apply to all of the notes played harmonically in the performance except for the final note on each staff, as those two notes will have the same [pitch class](https://en.wikipedia.org/wiki/Pitch_class) as the first note in the melody staff. These notes provide a sense of resolution and finality to the performance, and are the only two notes in the performance that aren't determined by the quantum computer.
 
 ## Performing a quantum musical composition
 
-To have the quantum computer or simulator perform your quantum musical composition, navigate to the **Performance** tab shown in Fig 4.
+To finish composing and to have the quantum computer or simulator perform your quantum musical composition, navigate to the **Performance** tab shown in Fig 4.
 
 ![performance-tab](docimages/performance-tab.png)
 
@@ -40,9 +40,9 @@ FIG. 4. User interface for the performance of your quantum musical composition
 
 
 
-By default the **Use simulator** checkbox is selected, but to indicate that you want to use a real quantum computer, deselect the checkbox. 
+By default the **Use simulator** checkbox is selected, but to indicate that you want to use a real quantum computer, deselect the checkbox. Also by default, the starting note of the melody in your composition will be in the C pitch class. You may choose a different starting note (either D, E or F) by selecting it from the on-screen piano keyboard. As mentioned earlier, the ending note in both the melody and harmony staves will be of the same pitch class as the starting note of the melody. Choosing a different starting note puts your your composition into a different [musical mode](https://en.wikipedia.org/w/index.php?title=Musical_mode), giving it a different quality or feeling.  
 
-The buttons labeled **Species** refer to three of the five [species of counterpoint music](https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint). Fig. 1 is an example of third species counterpoint, insofar as it meets the requirement of having four notes in one staff against one note in another staff. There are many more characteristics of species counterpoint, some of which you may choose to implement by defining corresponding melodic and harmonic probabilities. Of course, as a composer of quantum music, you may choose to define probabilities that cause the quantum computer to perform music that better suits your tastes. Figs. 4 and 5 show example quantum computer performances of first and second species counterpoint, insofar as they meet the note against note, and two notes against one note, requirements respectively.
+The buttons labeled **Species** refer to three of the five [species of counterpoint music](https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint). Fig. 1 is an example of third species counterpoint, insofar as it meets the requirement of having four notes in one staff against one note in another staff. Figs. 4 and 5 show example quantum computer performances of first and second species counterpoint, to the extent that they meet the note against note, and two notes against one note, requirements respectively. 
 
 ![first-species-performance](docimages/first-species-performance.png)
 
@@ -55,6 +55,10 @@ FIG. 5. Musical score captured from the performance of a first species compositi
 FIG. 6. Musical score captured from the performance of a second species composition
 
 
+
+There are many more characteristics of species counterpoint, some of which you may choose to implement by defining corresponding melodic and harmonic probabilities. Of course, as a composer of quantum music, you may choose to define probabilities that cause the quantum computer to perform music that better suits your tastes.
+
+After choosing one of the **Species** buttons shown in Fig. 4, quantum circuits that express your desired melodic probabilities, harmonic probabilities, counterpoint species, and melody starting note, will be sent to the quantum computer or simulator.
 
 
 
