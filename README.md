@@ -76,7 +76,7 @@ To install and run Quantum Music Composer:
 
 1. Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
 2. Install [Flask](http://flask.pocoo.org/)
-3. Install [Flask-CORS](https://flask-cors.readthedocs.io)
+3. Install [Flask-CORS](https://flask-cors.readthedocs.io) or a CORS extension in your browser
 4. Clone the [JavaFXpert/quantum-toy-piano-ibmq](JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
 5. Install the latest version of [Qiskit](https://qiskit.org/)
 
@@ -87,6 +87,10 @@ To install and run Quantum Music Composer:
 `python quantum_toy_piano_service_ibmq.py`
 
 - Open http://127.0.0.1:5002/static/index.html in a browser
+
+## Frequently Asked Questions
+
+None yet
 
 ## Questions / Feedback
 
