@@ -72,7 +72,7 @@ After clicking the OK button in the dialog in Fig. 7, you can hear the quantum c
 
 ## Installation
 
-To install and run Quantum Music Composer:
+To install and run Quantum Music Composer for IBM quantum computers:
 
 1. Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
 2. Install [Flask](http://flask.pocoo.org/)
