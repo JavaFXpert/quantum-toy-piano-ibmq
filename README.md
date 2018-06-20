@@ -6,6 +6,8 @@ The Quantum Music Composer application enables a user to compose music that is p
 
 FIG. 1. Musical score captured from the performance of a quantum musical composition
 
+
+
 ## Creating a quantum musical composition
 
 To create a quantum musical composition, the user first supplies the desired probabilities for a given pitch to follow another given pitch *melodically*. Take a moment to examine the music score in Fig. 1 and notice that the staff labeled **Melody** contains an eight-note melody. Please also realize that the staff labeled **Harmony** actually contains seven four-note melodies.  Users enter their desired probabilities into the [doubly-stochastic matrix](https://en.wikipedia.org/wiki/Doubly_stochastic_matrix) located on the left side of the **MELODY MATRICES** tab, shown in Fig 2. 
@@ -13,6 +15,8 @@ To create a quantum musical composition, the user first supplies the desired pro
 ![melody-tab-orthogonal-matrix](docimages/melody-tab-orthogonal-matrix.png)
 
 FIG. 2. User interface for composing quantum melodic progressions
+
+
 
 Clicking the **Optimize Rotations** button updates the [orthogonal matrix](https://en.wikipedia.org/wiki/Orthogonal_matrix) on the right to contain values, that when squared, comprise a [unistochastic matrix](https://en.wikipedia.org/wiki/Unistochastic_matrix) that approximates the user's desired probabilities. Deselecting and selecting the **Show Probabilities** checkbox toggles between showing the orthogonal matrix and the unistochastic matrix, respectively. The application optimizes the unistochastic matrix by gradually changing the angles of the six degree-of-freedom rotations in four-dimensional vector space until the difference between the doubly-stochastic matrix and the unistochastic matrix is minimized.  You can experiment with the effects of each rotation on the matrix on the right by using the sliders in the **Degree of Freedom Rotations** region of this tab. Each slider has the range ![eqn_range_0_pi2](docimages/eqn_range_0_pi2.gif) radians.
 
@@ -22,6 +26,8 @@ To continue creating the quantum musical composition, the user supplies the desi
 
 FIG. 3. User interface for composing quantum harmonic intervals
 
+
+
 The harmonic probabilities entered will apply to all of the notes played harmonically in the performance except for the final note on each staff, as those two notes will have the same pitch class as the first note in the melody staff. These notes provide a sense of resolution and finality to the performance, and are the only two notes in the performance that aren't determined by the quantum computer.
 
 ## Performing a quantum musical composition
@@ -30,7 +36,25 @@ To have the quantum computer or simulator perform your quantum musical compositi
 
 ![performance-tab](docimages/performance-tab.png)
 
-FIG. 4. User interface for performing quantum musical composition
+FIG. 4. User interface for the performance of your quantum musical composition
+
+
+
+By default the **Use simulator** checkbox is selected, but to indicate that you want to use a real quantum computer, deselect the checkbox. 
+
+The buttons labeled **Species** refer to three of the five [species of counterpoint music](https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint). Fig. 1 is an example of third species counterpoint, insofar as it meets the requirement of having four notes in one staff against one note in another staff. There are many more characteristics of species counterpoint, some of which you may choose to implement by defining corresponding melodic and harmonic probabilities. Of course, as a composer of quantum music, you may choose to define probabilities that cause the quantum computer to perform music that better suits your tastes. Figs. 4 and 5 show example quantum computer performances of first and second species counterpoint, insofar as they meet the note against note, and two notes against one note, requirements respectively.
+
+![first-species-performance](docimages/first-species-performance.png)
+
+FIG. 5. Musical score captured from the performance of a first species composition
+
+
+
+![second-species-performance](docimages/second-species-performance.png)
+
+FIG. 6. Musical score captured from the performance of a second species composition
+
+
 
 
 
