@@ -1,4 +1,4 @@
-# Quantum Music Composer
+# Quantum Music Composer for IBM quantum computers
 
 The Quantum Music Composer application enables a user to compose music that is performed by a quantum computer or quantum simulator. The musical *composition* consists of a series of quantum circuits. Each quantum musical tone [[1]](#references) in the *performance* of a composition is a quantum state, which when measured results in a pitch determined by quantum mechanical behavior. This normally results in unique melodies and harmonies each time a given composition is performed by a quantum computer or simulator. Fig. 1 contains a musical score captured from one such performance.
 
@@ -74,14 +74,23 @@ After clicking the OK button in the dialog in Fig. 7, you can hear the quantum c
 
 To install and run Quantum Music Composer:
 
-- Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
-- Clone the [JavaFXpert/quantum-toy-piano-ibmq](JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
-- Install the latest version of [Qiskit](https://qiskit.org/)
+1. Ensure that [Python 3.5 or later](https://www.python.org/downloads/) is installed
+2. Install [Flask](http://flask.pocoo.org/)
+3. Install [Flask-CORS](https://flask-cors.readthedocs.io)
+4. Clone the [JavaFXpert/quantum-toy-piano-ibmq](JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
+5. Install the latest version of [Qiskit](https://qiskit.org/)
+
+## Running
+
 - From the operating system prompt in the project's root directory, run:
 
 `python quantum_toy_piano_service_ibmq.py`
 
-- 
+- Open http://127.0.0.1:5002/static/index.html in a browser
+
+## Questions / Feedback
+
+Please reach out to me on the [QISkit](https://qiskit.org/) Slack community
 
 ## References
 

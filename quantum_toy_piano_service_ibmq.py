@@ -3,6 +3,7 @@ from qiskit import available_backends, execute, compile, register, get_backend
 from math import *
 import numpy as np
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import copy
 from s04_rotcircuit_ibmq import *
 from collections import deque
@@ -19,6 +20,7 @@ except:
                  For now, there's only access to local simulator backends...""")
 
 app = Flask(__name__)
+CORS(app)
 
 DEGREES_OF_FREEDOM = 6
 NUM_PITCHES = 4
