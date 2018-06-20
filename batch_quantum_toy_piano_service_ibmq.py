@@ -122,8 +122,7 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_melodic_circuit)
                 circuit_dict[qubit_string + "_m_" + format(melodic_circuit_idx, '02')] = input_qc
 
-                # TODO: Modify console output below to print circuit from circuit_dict
-                # print(qp.get_qasm(qubit_string + "_complete_rot_melodic_" + format(melodic_circuit_idx, '02')))
+                # print('input_qc.qasm(): ', input_qc.qasm())
 
         input_pitch = 0
         for pitch_idx in range(0, NUM_PITCHES):
@@ -142,8 +141,7 @@ def toy_piano_counterpoint():
                 input_qc.extend(rot_harmonic_circuit)
                 circuit_dict[qubit_string + "_h_" + format(harmonic_circuit_idx, '02')] = input_qc
 
-                # TODO: Modify console output below to print circuit from circuit_dict
-                # print(qp.get_qasm(qubit_string + "_complete_rot_harmonic_" + format(harmonic_circuit_idx, '02')))
+                # print('input_qc.qasm(): ', input_qc.qasm())
 
         # print(circuit_dict)
 

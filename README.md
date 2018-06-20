@@ -58,9 +58,17 @@ FIG. 6. Musical score captured from the performance of a second species composit
 
 There are many more characteristics of species counterpoint, some of which you may choose to implement by defining corresponding melodic and harmonic probabilities. Of course, as a composer of quantum music, you may choose to define probabilities that cause the quantum computer to perform music that better suits your tastes.
 
-After choosing one of the **Species** buttons shown in Fig. 4, quantum circuits that express your desired melodic probabilities, harmonic probabilities, counterpoint species, and melody starting note, will be sent to the quantum computer or simulator.
+After choosing one of the **Species** buttons shown in Fig. 4, quantum circuits that express your desired melodic probabilities, harmonic probabilities, counterpoint species, and melody starting note, will be sent to the quantum computer or simulator. When the quantum circuits are finished running, the dialog shown in Fig. 7 is displayed. This dialog contains text that may be pasted into a [LilyPond](http://lilypond.org/manuals.html) music score engraver to produce musical scores like the one shown in Fig. 1. 
 
 
+
+![performance-tab-dialog](docimages/performance-tab-dialog.png)
+
+FIG. 7. Dialog that contains the musical score expressed in LilyPond notation
+
+
+
+After clicking the OK button in the dialog in Fig. 7, you can hear the quantum computer's performance of your composition by clicking the **Play** button. Please note that occasionally there is some delay at the beginning of playback after which the beginning notes play faster than they should. If that happens, click the **Stop** button and click the **Play** button again.
 
 ## Installation
 
