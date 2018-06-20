@@ -2,7 +2,7 @@
 
 The Quantum Music Composer application enables a user to compose music that is performed by a quantum computer or quantum simulator. The musical *composition* consists of a series of quantum circuits. Each quantum musical tone [[1]](#references) in the *performance* of a composition is a quantum state, which when measured results in a pitch determined by quantum mechanical behavior. This normally results in unique melodies and harmonies each time a given composition is performed by a quantum computer or simulator. Fig. 1 contains a musical score captured from one such performance.
 
-![third-species-performance-ibmq](docimages/third-species-performance-ibmq.png)
+![third-species-performance](docimages/third-species-performance.png)
 
 FIG. 1. Musical score captured from the performance of a quantum musical composition
 
@@ -28,7 +28,7 @@ The harmonic probabilities entered will apply to all of the notes played harmoni
 
 To have the quantum computer or simulator perform your quantum musical composition, navigate to the **Performance** tab shown in Fig 4.
 
-![performance-tab-ibmq](docimages/performance-tab-ibmq.png)
+![performance-tab](docimages/performance-tab.png)
 
 FIG. 4. User interface for performing quantum musical composition
 
