@@ -94,7 +94,7 @@ None yet
 
 ## Questions / Feedback
 
-Please reach out to me on the [QISkit](https://qiskit.org/) Slack community
+Please reach out to me (James Weaver) on the [QISkit](https://qiskit.org/) Slack community
 
 ## References
 
