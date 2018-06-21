@@ -78,7 +78,7 @@ To install and run Quantum Music Composer for IBM quantum computers:
 2. Install [Flask](http://flask.pocoo.org/)
 3. Install [Flask-CORS](https://flask-cors.readthedocs.io) or a CORS extension in your browser
 4. Clone the [JavaFXpert/quantum-toy-piano-ibmq](https://github.com/JavaFXpert/quantum-toy-piano-ibmq) project from GitHub.
-5. Install the latest version of [Qiskit](https://qiskit.org/)
+5. Install the latest version of [Qiskit](https://qiskit.org/). If you want to use a real quantum computer (i.e. with the **Use simulator** checkbox unchecked), you'll need to follow the steps for obtaining and configuring an API token.
 
 ## Running
 
