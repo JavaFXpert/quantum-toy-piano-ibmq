@@ -94,10 +94,31 @@ To install and run Quantum Music Composer for IBM quantum computers:
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Is Quantum Music Composer available for other quantum computers besides IBM? | Yes. There is a [version for Rigetti quantum computers](https://github.com/JavaFXpert/quantum-toy-piano) |
 | Why can't I hear the notes being played?                     | There currently seems to be an issue with hearing the notes (wav files) in Safari browsers. I'm checking into a workaround. |
+| Where can I listen to audio samples of improvisational compositions? | There are links below each of the musical scores labeled [play] that will navigate to a page with a video of that score playing. Also, the [More Improvisational Compositions](#more-improvisational-compositions) section contains additional samples. |
 
 ## Questions / Feedback
 
-Please reach out to me (James Weaver) on the [QISkit](https://qiskit.org/) Slack community
+Please reach out to me (James Weaver) on the [QISkit](https://qiskit.org/) Slack community or [@JavaFXpert](https://twitter.com/JavaFXpert) on Twitter
+
+## More Improvisational Compositions
+
+![simulator-first](docimages/simulator-first.png)
+
+Musical score captured from the improvisational performance by a quantum simulator of first-species counterpoint [[play]](https://vimeo.com/277782596)
+
+
+
+![simulator-second](docimages/simulator-second.png)
+
+Musical score captured from the improvisational performance by a quantum simulator of second-species counterpoint [[play]](https://vimeo.com/277783053)
+
+
+
+![simulator-third](docimages/simulator-third.png)
+
+Musical score captured from the improvisational performance by a quantum simulator of third-species counterpoint [[play]](https://vimeo.com/277783383)
+
+
 
 ## References
 
