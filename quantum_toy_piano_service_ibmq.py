@@ -38,7 +38,7 @@ app = Flask(__name__)
 CORS(app)
 
 DEGREES_OF_FREEDOM = 6
-NUM_PITCHES = 4
+# NUM_PITCHES = 4
 DIATONIC_SCALE_OCTAVE_PITCHES = 8
 NUM_CIRCUIT_WIRES = 3
 TOTAL_MELODY_NOTES = 7
@@ -74,9 +74,9 @@ CIRCUIT_RESULT_KEY_LENGTH = 5 # '000_m' is such a key, for example
 @app.route('/toy_piano_counterpoint')
 def toy_piano_counterpoint():
     pitch_index = int(request.args['pitch_index'])
-    pitch_index %= (DIATONIC_SCALE_OCTAVE_PITCHES - 1)
-    if pitch_index >= NUM_PITCHES:
-        pitch_index = 0
+    if pitch_index >= DIATONIC_SCALE_OCTAVE_PITCHES:
+        # pitch_index = 0
+        pitch_index %= (DIATONIC_SCALE_OCTAVE_PITCHES - 1)
 
     species = int(request.args['species'])
 
@@ -91,7 +91,7 @@ def toy_piano_counterpoint():
     if (len(melodic_degrees) == DEGREES_OF_FREEDOM and
             len(harmonic_degrees) == DEGREES_OF_FREEDOM and
             1 <= species <= 3 and
-            0 <= pitch_index < NUM_PITCHES):
+            0 <= pitch_index < DIATONIC_SCALE_OCTAVE_PITCHES):
 
         circuit_dict = {}  # Key is circuit name, value is circuit
 
@@ -106,6 +106,15 @@ def toy_piano_counterpoint():
         res_dict['010_h'] = deque([])
         res_dict['011_m'] = deque([])
         res_dict['011_h'] = deque([])
+
+        res_dict['100_m'] = deque([])
+        res_dict['100_h'] = deque([])
+        res_dict['101_m'] = deque([])
+        res_dict['101_h'] = deque([])
+        res_dict['110_m'] = deque([])
+        res_dict['110_h'] = deque([])
+        res_dict['111_m'] = deque([])
+        res_dict['111_h'] = deque([])
 
         q_reg = QuantumRegister(3)
         c_req = ClassicalRegister(3)
@@ -123,7 +132,7 @@ def toy_piano_counterpoint():
         num_required_harmonic_circuits_per_pitch = 7
 
         # input_pitch = 0
-        for pitch_idx in range(0, NUM_PITCHES):
+        for pitch_idx in range(0, DIATONIC_SCALE_OCTAVE_PITCHES):
             for melodic_circuit_idx in range(0, num_required_melodic_circuits_per_pitch):
                 input_qc = QuantumCircuit(q_reg, c_req)
                 qubit_string = format(pitch_idx, '03b') # TODO: Use NUM_CIRCUIT_WIRES in format string
@@ -142,7 +151,7 @@ def toy_piano_counterpoint():
                 # print('input_qc.qasm(): ', input_qc.qasm())
 
         input_pitch = 0
-        for pitch_idx in range(0, NUM_PITCHES):
+        for pitch_idx in range(0, DIATONIC_SCALE_OCTAVE_PITCHES):
             for harmonic_circuit_idx in range(0, num_required_harmonic_circuits_per_pitch):
                 input_qc = QuantumCircuit(q_reg, c_req)
                 qubit_string = format(pitch_idx, '03b') # TODO: Use NUM_CIRCUIT_WIRES in format string
@@ -216,9 +225,8 @@ def toy_piano_counterpoint():
         for melody_note_idx in range(0, TOTAL_MELODY_NOTES):
             #
             if (melody_note_idx < TOTAL_MELODY_NOTES - 1):
-                # Zero the most-significant bit in case is 1 due to a noisy circuit
-                res_dict_key = "0"
-                for bit_idx in range(1, NUM_CIRCUIT_WIRES):
+                res_dict_key = ""
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
 
                 res_dict_key += "_m"
@@ -239,9 +247,8 @@ def toy_piano_counterpoint():
                 # print(res_dict)
 
             # Now compute a harmony note for the melody note
-            # Zero the most-significant bit in case is 1 due to a noisy circuit
-            res_dict_key = "0"
-            for bit_idx in range(1, NUM_CIRCUIT_WIRES):
+            res_dict_key = ""
+            for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                 res_dict_key += str(composition_bits[melody_note_idx * NUM_CIRCUIT_WIRES + bit_idx])
 
             res_dict_key += "_h"
@@ -259,9 +266,8 @@ def toy_piano_counterpoint():
             # Now compute melody notes to follow the harmony note
             for harmony_note_idx in range(1, harmony_notes_factor):
 
-                # Zero the most-significant bit in case is 1 due to a noisy circuit
-                res_dict_key = "0"
-                for bit_idx in range(1, NUM_CIRCUIT_WIRES):
+                res_dict_key = ""
+                for bit_idx in range(0, NUM_CIRCUIT_WIRES):
                     res_dict_key += str(composition_bits[(melody_note_idx * NUM_CIRCUIT_WIRES * harmony_notes_factor) +
                                          ((harmony_note_idx - 1) * NUM_CIRCUIT_WIRES) +
                                          (TOTAL_MELODY_NOTES * NUM_CIRCUIT_WIRES) + bit_idx])
