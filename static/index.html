@@ -42,12 +42,13 @@
 
   <script src="scripts/axios.min.js"></script>
 
-  <script src="main.js"></script>
+  <!--script src="OBSmain.js"></script-->
   <script src="piano.js"></script>
   <script src="stochastic-matrix.js"></script>
   <script src="unistochastic-matrix.js"></script>
   <script src="stochastic-harmony-matrix.js"></script>
   <script src="unistochastic-harmony-matrix.js"></script>
+  <script src="jamming.js"></script>
 </head>
 
 <body>
@@ -140,6 +141,16 @@
                 </div>
               </v-container>
             </v-tab-item>
+
+            <v-tab>Jamming</v-tab>
+            <v-tab-item>
+              <v-container fluid>
+                <div id="jamming">
+                  <jamming/>
+                </div>
+              </v-container>
+            </v-tab-item>
+
           </v-tabs>
         </v-content>
       </main>

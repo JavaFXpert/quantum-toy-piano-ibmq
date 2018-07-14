@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+var perf = {
+  meas: []
+};
+
 var soundpack=[];
 var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,8,8.5,9,9.5,10,11,11.5,12,12.5,13,13.5,14,15];
 for(var i=0;i<soundpack_index.length;i++){
@@ -215,6 +219,8 @@ var vm = Vue.component('piano-component', {
       alert(resp.data.lilypond)
       this.notes = resp.data.toy_piano;
       //this.startplay();
+
+      perf.meas = resp.data.full_res_dict;
     }
 
   }
