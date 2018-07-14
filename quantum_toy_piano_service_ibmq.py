@@ -203,6 +203,10 @@ def toy_piano_counterpoint():
             res_dict[circuit_name[0:CIRCUIT_RESULT_KEY_LENGTH]].append(bitstr)
             # print(bitstr)
 
+        full_res_dict = dict()
+        for key in res_dict:
+            full_res_dict[key] = list(res_dict[key])
+
         print(res_dict)
 
         harmony_notes_factor = 2**(species - 1)  # Number of harmony notes for each melody note
@@ -299,7 +303,8 @@ def toy_piano_counterpoint():
     ret_dict = {"melody": melody_note_nums,
                 "harmony": harmony_note_nums,
                 "lilypond": create_lilypond(melody_note_nums, harmony_note_nums, composer),
-                "toy_piano" : create_toy_piano(melody_note_nums, harmony_note_nums)}
+                "toy_piano" : create_toy_piano(melody_note_nums, harmony_note_nums),
+                "full_res_dict": full_res_dict}
 
     return jsonify(ret_dict)
 
