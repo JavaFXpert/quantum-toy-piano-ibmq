@@ -66,6 +66,7 @@ var vm = Vue.component('piano-component', {
         '<button @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' +
+        '<button @click="jam">Jam</button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
           'target="_blank"> counterpoint species</a> to perform by clicking one of the Species' +
@@ -221,8 +222,85 @@ var vm = Vue.component('piano-component', {
       //this.startplay();
 
       perf.meas = resp.data.full_res_dict;
-    }
+    },
 
+    jam: function() {
+      var jobj = this;
+      var numNotesInPhrase = 4;
+      WebMidi.enable(function (err) {
+
+        if (err) {
+          alert("WebMidi could not be enabled");
+        }
+        else {
+          console.log("WebMidi enabled!");
+          console.log(WebMidi.inputs);
+          midiInput = WebMidi.inputs[0];
+
+          var numNoteOffEvents = 0;
+
+          midiInput.addListener('noteoff', "all",
+            function (e) {
+              numNoteOffEvents++;
+              var noteName = e.note.name;
+              var noteOctave = e.note.octave;
+              var noteNameOctave = noteName + noteOctave;
+              var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
+              console.log("Received 'noteoff' message (" + noteNameOctave + ", " + numNoteOffEvents + ").");
+
+              if (numNoteOffEvents % numNotesInPhrase == 0) {
+                var basisState = jobj.noteToBasisState(noteName, noteOctave);
+                var melodyBasisKey = basisState + "_m";
+                var harmonyBasisKey = basisState + "_h";
+
+                console.log('melodyBasisKey: ' + melodyBasisKey);
+                console.log('perf.meas: ' + perf.meas[melodyBasisKey][0]);
+
+                console.log('harmonyBasisKey: ' + harmonyBasisKey);
+                console.log('perf.meas: ' + perf.meas[harmonyBasisKey][0]);
+              }
+            }
+          );
+        }
+      });
+    },
+
+    noteToBasisState: function(name, octave) {
+      var basisState;
+      var naturalNoteName = name.substring(0, 1);
+      if (naturalNoteName === "C") {
+        if (octave <= 3) {
+          basisState = "000";
+        }
+        else {
+          basisState = "111";
+        }
+      }
+      else if (naturalNoteName === "D") {
+        basisState = "001";
+      }
+      else if (naturalNoteName === "E") {
+        basisState = "010";
+      }
+      else if (naturalNoteName === "F") {
+        basisState = "011";
+      }
+      else if (naturalNoteName === "G") {
+        basisState = "100";
+      }
+      else if (naturalNoteName === "A") {
+        basisState = "101";
+      }
+      else if (naturalNoteName === "B") {
+        basisState = "110";
+      }
+      return basisState;
+    },
+
+    popNote: function(qualifiedBasis) {
+      // qualifiedBasis is "000_m" or "000_h" where 000 is a binary number
+
+    }
   }
 });
 
