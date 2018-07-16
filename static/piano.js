@@ -226,7 +226,7 @@ var vm = Vue.component('piano-component', {
 
     jam: function() {
       var jobj = this;
-      var numNotesInPhrase = 4;
+      var numNotesInPhrase = 1;
       WebMidi.enable(function (err) {
 
         if (err) {
@@ -247,7 +247,7 @@ var vm = Vue.component('piano-component', {
               var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
               console.log("Received 'noteon' message (" + noteNameOctave + ", " + numNoteOffEvents + ").");
 
-              var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteName, noteOctave);
+              var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
               // TODO use volume from noteon event
@@ -270,8 +270,22 @@ var vm = Vue.component('piano-component', {
                 measMelodyBasisState = jobj.popMeas(basisState, false);
                 console.log('popMeas melody for' + basisState + ": " + measMelodyBasisState);
 
-                measHarmonyBasisState = jobj.popMeas(basisState, true);
-                console.log('popMeas melody for' + basisState + ": " + measHarmonyBasisState);
+                measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
+                console.log('popMeas harmony for' + measMelodyBasisState + ": " + measHarmonyBasisState);
+
+                var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave + 1);
+                var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
+
+                var melodyToyPianoPitchNum =
+                    jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                console.log('melodyToyPianoPitchNum: ' + melodyToyPianoPitchNum);
+
+                var harmonyToyPianoPitchNum =
+                    jobj.noteToToyPianoPitch(harmonyNoteNameOctave);
+                console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
+
+                jobj.playnote(melodyToyPianoPitchNum, 1);
+                jobj.playnote(harmonyToyPianoPitchNum, 1);
               }
             }
           );
@@ -317,16 +331,54 @@ var vm = Vue.component('piano-component', {
     },
 
     /*
-       Inputs: Note name (e.g. "C") and octave (e.g. 4)
+       Inputs: Basis state (e.g. "000") and octave (e.g. 3)
+       Returns: Note name (e.g. "C3") corresponding to basis state and octave.
+                For example, when "000" and 3 are input, output is C3, but
+                when "111" and 3 are input, "C4" is output.
+     */
+    basisStateToNote: function(basisState, octave) {
+      var noteName;
+      var octaveNum = octave;
+      if (basisState === "000") {
+        noteName = "C";
+      }
+      else if (basisState === "001") {
+        noteName = "D";
+      }
+      else if (basisState === "010") {
+        noteName = "E";
+      }
+      else if (basisState === "011") {
+        noteName = "F";
+      }
+      else if (basisState === "100") {
+        noteName = "G";
+      }
+      else if (basisState === "101") {
+        noteName = "A";
+      }
+      else if (basisState === "110") {
+        noteName = "B";
+      }
+      else if (basisState === "111") {
+        noteName = "C";
+        octaveNum++;
+      }
+      return noteName + octaveNum;
+    },
+
+    /*
+       Inputs: Note name including octave (e.g. "C4")
        Returns: Toy piano pitch for note and octave
      */
-    noteToToyPianoPitch: function(name, octave) {
+    noteToToyPianoPitch: function(nameOctave) {
       // TODO: Support more octaves
       //var noteMidiNumber = WebMidi.noteNameToNumber(name + octave);
       var toyPianoNoteOffset = 0;
       var toyPianoNoteNum = 0;
-      var naturalName = name.substring(0, 1)
-      var sharp = name.length > 1 && name.substring(1, 2) === "#";
+      var naturalName = nameOctave.slice(0, 1)
+      var sharp = nameOctave.length == 3 && nameOctave.slice(1, 2) === "#";
+      var octave = +(nameOctave.slice(-1));
       if (octave <= 3) {
         toyPianoNoteOffset = 0;
       }
