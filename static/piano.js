@@ -59,7 +59,7 @@ var vm = Vue.component('piano-component', {
         '<button @click="request_counterpoint(2)">Species 2</button>' +
         '<button @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
-        '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' +
+        '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
         '<button @click="jam">Jam</button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
@@ -277,8 +277,8 @@ var vm = Vue.component('piano-component', {
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
-              // TODO use volume from noteon event
-              jobj.playnote(toyPianoPitchNum, 1);
+              //jobj.playnote(toyPianoPitchNum, 1);
+              jobj.addnotedelayed(toyPianoPitchNum, 0);
 
               if (numNoteOnEvents % numNotesInPhrase == 0) {
                 var basisState = jobj.noteToBasisState(noteName, noteOctave);
