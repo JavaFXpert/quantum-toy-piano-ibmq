@@ -51,12 +51,6 @@ var vm = Vue.component('piano-component', {
         '</div>' +
       '</div>' +
       '<div class="controls">' +
-        '<ul class="notes_list" v-if="notes.length&gt;0">' +
-          '<li v-for="(note,id) in notes" :class="now_note_id-1==id?&quot;playing&quot;:&quot;&quot;">' +
-            '<div class="num">{{pitches[note.num - 1]}}</div>' +
-            '<div class="time">{{note.time}}</div>' +
-          '</li>' +
-        '</ul>' +
         '<br/>' +
         '<input type="checkbox" id="simulatorselect" @click="togglesimulator" checked="usesimulator"/>' +
         '<label for="simulatorselect" class="mr-4">&nbsp;Use simulator</label>' +
@@ -74,6 +68,12 @@ var vm = Vue.component('piano-component', {
           ' you may optionally paste it into a Lilypond music score engraver. After clicking the OK' +
           ' button, click the Play button to hear a performance by the quantum computer or simulator' +
           ' of the quantum music you composed.</p>' +
+        '<ul class="notes_list" v-if="notes.length&gt;0">' +
+          '<li v-for="(note,id) in notes" :class="now_note_id-1==id?&quot;playing&quot;:&quot;&quot;">' +
+            '<div class="num">{{pitches[note.num - 1]}}</div>' +
+            '<div class="time">{{note.time}}</div>' +
+          '</li>' +
+        '</ul>' +
       '</div>' +
     '</div>',
   data: function () {
@@ -339,28 +339,11 @@ var vm = Vue.component('piano-component', {
 
           midiInput.addListener('noteoff', "all",
             function (e) {
-              //numNoteOffEvents++;
               var noteName = e.note.name;
               var noteOctave = e.note.octave;
               var noteNameOctave = noteName + noteOctave;
               var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
-              console.log("Received 'noteoff' message (" + noteNameOctave + ").");
-
-              // if (numNoteOffEvents % numNotesInPhrase == 0) {
-              //   var basisState = jobj.noteToBasisState(noteName, noteOctave);
-              //
-              //   var measMelodyBasisState = jobj.popMeas(basisState, false);
-              //   console.log('popMeas melody for' + basisState + ": " + measMelodyBasisState);
-              //
-              //   var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave + 1);
-              //
-              //   var melodyToyPianoPitchNum =
-              //       jobj.noteToToyPianoPitch(melodyNoteNameOctave);
-              //   console.log('melodyToyPianoPitchNum: ' + melodyToyPianoPitchNum);
-              //
-              //   //jobj.playnote(melodyToyPianoPitchNum, 1);
-              //   jobj.addnotedelayed(melodyToyPianoPitchNum, quarter_note_dur);
-              // }
+              //console.log("Received 'noteoff' message (" + noteNameOctave + ").");
             }
           );
 
@@ -459,7 +442,7 @@ var vm = Vue.component('piano-component', {
       else if (octave == 4) {
         toyPianoNoteOffset = 7;
       }
-      else if (octave == 5 & naturalName === "C") {
+      else if (octave >= 5 & naturalName === "C") {
         toyPianoNoteOffset = 14;
       }
       if (naturalName === "C") {
