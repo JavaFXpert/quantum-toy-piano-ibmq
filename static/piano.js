@@ -250,14 +250,12 @@ var vm = Vue.component('piano-component', {
 
               if (numNoteOffEvents % numNotesInPhrase == 0) {
                 var basisState = jobj.noteToBasisState(noteName, noteOctave);
-                var melodyBasisKey = basisState + "_m";
-                var harmonyBasisKey = basisState + "_h";
 
-                console.log('melodyBasisKey: ' + melodyBasisKey);
-                console.log('perf.meas: ' + perf.meas[melodyBasisKey][0]);
+                measMelodyBasisState = jobj.popMeas(basisState, false);
+                console.log('popMeas melody for' + basisState + ": " + measMelodyBasisState);
 
-                console.log('harmonyBasisKey: ' + harmonyBasisKey);
-                console.log('perf.meas: ' + perf.meas[harmonyBasisKey][0]);
+                measHarmonyBasisState = jobj.popMeas(basisState, true);
+                console.log('popMeas melody for' + basisState + ": " + measHarmonyBasisState);
               }
             }
           );
@@ -297,9 +295,22 @@ var vm = Vue.component('piano-component', {
       return basisState;
     },
 
-    popNote: function(qualifiedBasis) {
-      // qualifiedBasis is "000_m" or "000_h" where 000 is a binary number
+    popMeas: function(basisState, harmony) {
+      // key is "000_m" or "000_h" where 000 is a binary number
+      var key = basisState;
+      if (!!harmony) {
+        key += "_h";
+      }
+      else {
+        key += "_m";
+      }
 
+      var poppedVal = perf.meas[key].shift();
+      if (poppedVal == undefined) {
+        console.log("No more measurements for: " + key)
+        poppedVal = "111";
+      }
+      return poppedVal;
     }
   }
 });
