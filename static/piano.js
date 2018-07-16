@@ -239,6 +239,22 @@ var vm = Vue.component('piano-component', {
 
           var numNoteOffEvents = 0;
 
+          midiInput.addListener('noteon', "all",
+            function (e) {
+              var noteName = e.note.name;
+              var noteOctave = e.note.octave;
+              var noteNameOctave = noteName + noteOctave;
+              var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
+              console.log("Received 'noteon' message (" + noteNameOctave + ", " + numNoteOffEvents + ").");
+
+              var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteName, noteOctave);
+              console.log("toyPianoPitchNum: " + toyPianoPitchNum);
+
+              // TODO use volume from noteon event
+              jobj.playnote(toyPianoPitchNum, 1);
+            }
+          );
+
           midiInput.addListener('noteoff', "all",
             function (e) {
               numNoteOffEvents++;
@@ -259,10 +275,15 @@ var vm = Vue.component('piano-component', {
               }
             }
           );
+
         }
       });
     },
 
+    /*
+       Inputs: Note name (e.g. "C") and octave (e.g. 4)
+       Returns: Basis state (e.g. "000") for note and octave
+     */
     noteToBasisState: function(name, octave) {
       var basisState;
       var naturalNoteName = name.substring(0, 1);
@@ -293,6 +314,56 @@ var vm = Vue.component('piano-component', {
         basisState = "110";
       }
       return basisState;
+    },
+
+    /*
+       Inputs: Note name (e.g. "C") and octave (e.g. 4)
+       Returns: Toy piano pitch for note and octave
+     */
+    noteToToyPianoPitch: function(name, octave) {
+      // TODO: Support more octaves
+      //var noteMidiNumber = WebMidi.noteNameToNumber(name + octave);
+      var toyPianoNoteOffset = 0;
+      var toyPianoNoteNum = 0;
+      var naturalName = name.substring(0, 1)
+      var sharp = name.length > 1 && name.substring(1, 2) === "#";
+      if (octave <= 3) {
+        toyPianoNoteOffset = 0;
+      }
+      else if (octave == 4) {
+        toyPianoNoteOffset = 7;
+      }
+      else if (octave == 5 & naturalName === "C") {
+        toyPianoNoteOffset = 14;
+      }
+      if (naturalName === "C") {
+        toyPianoNoteNum = 1;
+      }
+      else if (naturalName === "D") {
+        toyPianoNoteNum = 2;
+      }
+      else if (naturalName === "E") {
+        toyPianoNoteNum = 3;
+      }
+      else if (naturalName === "F") {
+        toyPianoNoteNum = 4;
+      }
+      else if (naturalName === "G") {
+        toyPianoNoteNum = 5;
+      }
+      else if (naturalName === "A") {
+        toyPianoNoteNum = 6;
+      }
+      else if (naturalName === "B") {
+        toyPianoNoteNum = 7;
+      }
+
+      toyPianoNoteNum +=  + toyPianoNoteOffset;
+      if (sharp) {
+        toyPianoNoteNum += 0.5
+      }
+
+      return toyPianoNoteNum;
     },
 
     popMeas: function(basisState, harmony) {
