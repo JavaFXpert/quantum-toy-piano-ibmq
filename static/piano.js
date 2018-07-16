@@ -250,8 +250,19 @@ var vm = Vue.component('piano-component', {
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
+              var basisState = jobj.noteToBasisState(noteName, noteOctave);
+              var measHarmonyBasisState = jobj.popMeas(basisState, true);
+              console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
+
+              var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
+
+              var harmonyToyPianoPitchNum =
+                  jobj.noteToToyPianoPitch(harmonyNoteNameOctave);
+              console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
+
               // TODO use volume from noteon event
               jobj.playnote(toyPianoPitchNum, 1);
+              jobj.playnote(harmonyToyPianoPitchNum, 1);
             }
           );
 
@@ -267,25 +278,16 @@ var vm = Vue.component('piano-component', {
               if (numNoteOffEvents % numNotesInPhrase == 0) {
                 var basisState = jobj.noteToBasisState(noteName, noteOctave);
 
-                measMelodyBasisState = jobj.popMeas(basisState, false);
+                var measMelodyBasisState = jobj.popMeas(basisState, false);
                 console.log('popMeas melody for' + basisState + ": " + measMelodyBasisState);
 
-                measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
-                console.log('popMeas harmony for' + measMelodyBasisState + ": " + measHarmonyBasisState);
-
                 var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave + 1);
-                var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
 
                 var melodyToyPianoPitchNum =
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave);
                 console.log('melodyToyPianoPitchNum: ' + melodyToyPianoPitchNum);
 
-                var harmonyToyPianoPitchNum =
-                    jobj.noteToToyPianoPitch(harmonyNoteNameOctave);
-                console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
-
                 jobj.playnote(melodyToyPianoPitchNum, 1);
-                jobj.playnote(harmonyToyPianoPitchNum, 1);
               }
             }
           );
