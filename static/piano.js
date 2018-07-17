@@ -131,8 +131,11 @@ var vm = Vue.component('piano-component', {
       numNoteOnEvents: 0,
       measurements: {},
       measurementsOriginal: {},
-      numBeatsUserPlaysInPhrase: 4,
-      numBeatsQcPlaysInPhrase: 4
+      numBeatsUserPlaysInPhrase: 0,
+      numBeatsQcPlaysInPhrase: 0,
+      quarterNoteDuration: 0,
+      phraseStartTime: 0,
+      phraseEndTime: 0
     }
   },
   methods: {
@@ -258,8 +261,10 @@ var vm = Vue.component('piano-component', {
 
       numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
-      // Constant for quarter note duration in ms
-      var quarter_note_dur = 100;
+      quarterNoteDurationMax = 300;
+
+      // Constant quarter note duration factor
+      var quarterNoteDurationFactor = 0.25;
 
       this.notes = [];
       this.stopplay();
@@ -276,6 +281,10 @@ var vm = Vue.component('piano-component', {
 
           midiInput.addListener('noteon', "all",
             function (e) {
+              if (numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+                this.phraseStartTime = Date.now();
+              }
+
               numNoteOnEvents++;
               var noteName = e.note.name;
               var noteOctave = e.note.octave;
@@ -290,6 +299,11 @@ var vm = Vue.component('piano-component', {
               jobj.addnotedelayed(toyPianoPitchNum, 0);
 
               if (numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+                this.phraseEndTime = Date.now();
+                this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
+                    (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor)|0;
+                this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
+
                 var basisState = jobj.noteToBasisState(noteName, noteOctave);
 
 
@@ -319,11 +333,11 @@ var vm = Vue.component('piano-component', {
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave);
                 console.log('melodyToyPianoPitchNum 1: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, quarter_note_dur);
+                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration);
 
 
                 if (numBeatsQcPlaysInPhrase == 4) {
-                  // Play armony on the down beat
+                  // Play harmony on the down beat
                   // Get harmony note for melody note
                   var measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
                   console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
@@ -348,7 +362,7 @@ var vm = Vue.component('piano-component', {
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave);
                 console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, quarter_note_dur * 2);
+                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 2);
 
 
                 // Get 3rd melody note to follow 2st melody note
@@ -361,7 +375,7 @@ var vm = Vue.component('piano-component', {
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave);
                 console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, quarter_note_dur * 3);
+                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
 
                 if (numBeatsQcPlaysInPhrase >= 4) {
                   // Get 4th melody note to follow 3rd melody note
@@ -374,7 +388,7 @@ var vm = Vue.component('piano-component', {
                       jobj.noteToToyPianoPitch(melodyNoteNameOctave);
                   console.log('melodyToyPianoPitchNum 3: ' + melodyToyPianoPitchNum);
 
-                  jobj.addnotedelayed(melodyToyPianoPitchNum, quarter_note_dur * 4);
+                  jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 4);
                 }
               }
             }
