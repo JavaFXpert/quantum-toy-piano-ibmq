@@ -129,7 +129,8 @@ var vm = Vue.component('piano-component', {
       ],
       pitches: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'', 'C\'\''],
       numNoteOnEvents: 0,
-      measurements: [],
+      measurements: {},
+      measurementsOriginal: {},
       numBeatsUserPlaysInPhrase: 4,
       numBeatsQcPlaysInPhrase: 4
     }
@@ -225,7 +226,6 @@ var vm = Vue.component('piano-component', {
           "&harmonic_degrees=" + melodyDegreesStr +
           "&use_simulator=" + this.usesimulator)
           .then(function (response) {
-            measurements = response.data.full_res_dict;
             vobj.load_notes_from_response(response);
           })
           .catch(function (error) {
@@ -236,11 +236,10 @@ var vm = Vue.component('piano-component', {
 
     load_notes_from_response: function(resp) {
       console.log(resp)
-      alert(resp.data.lilypond)
       this.notes = resp.data.toy_piano;
-      //this.startplay();
-
-      //perf.meas = resp.data.full_res_dict;
+      this.measurementsOriginal = resp.data.full_res_dict;
+      this.measurements = $.extend(true, {}, this.measurementsOriginal);
+      alert(resp.data.lilypond)
     },
 
     /*
@@ -249,6 +248,7 @@ var vm = Vue.component('piano-component', {
      */
     jam: function(userPhraseBeats) {
       var jobj = this;
+      this.measurements = $.extend(true, {}, this.measurementsOriginal);
       numNoteOnEvents = 0;
 
       // Constant for total number of beats in shared phrase between user and QC
@@ -528,7 +528,7 @@ var vm = Vue.component('piano-component', {
         key += "_m";
       }
 
-      var poppedVal = measurements[key].shift();
+      var poppedVal = this.measurements[key].shift();
       if (poppedVal == undefined) {
         console.log("No more measurements for: " + key)
         poppedVal = "111";
