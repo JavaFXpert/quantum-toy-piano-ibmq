@@ -62,6 +62,7 @@ var vm = Vue.component('piano-component', {
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
         '<button @click="jam(4)">Jam Four</button>' +
         '<button @click="jam(5)">Jam Five</button>' +
+        '<button v-if="jamming">JAMMING...<i class="fa fa-play"></i></button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
           'target="_blank"> counterpoint species</a> to perform by clicking one of the Species' +
@@ -135,7 +136,8 @@ var vm = Vue.component('piano-component', {
       numBeatsQcPlaysInPhrase: 0,
       quarterNoteDuration: 0,
       phraseStartTime: 0,
-      phraseEndTime: 0
+      phraseEndTime: 0,
+      jamming: false
     }
   },
   methods: {
@@ -167,9 +169,15 @@ var vm = Vue.component('piano-component', {
       this.next_note_id=0;
       var vobj=this;
       this.player=setInterval(function(){
-        if (vobj.notes[vobj.next_note_id] != undefined && vobj.playing_time>=vobj.notes[vobj.next_note_id].time){
-          vobj.playnext(1);
-          vobj.next_note_id++;
+        if (vobj.notes[vobj.next_note_id] != undefined) {
+          if (vobj.playing_time>=vobj.notes[vobj.next_note_id].time) {
+            vobj.playnext(1);
+            vobj.next_note_id++;
+            vobj.jamming = false;
+          }
+          else {
+            vobj.jamming = true;
+          }
         }
         vobj.playing_time++;
       },2);
@@ -252,7 +260,9 @@ var vm = Vue.component('piano-component', {
     jam: function(userPhraseBeats) {
       var jobj = this;
       this.measurements = $.extend(true, {}, this.measurementsOriginal);
-      numNoteOnEvents = 0;
+      this.numNoteOnEvents = 0;
+
+      this.jamming = false;
 
       // Constant for total number of beats in shared phrase between user and QC
       var numBeatsInSharedPhrase = 8;
@@ -281,16 +291,16 @@ var vm = Vue.component('piano-component', {
 
           midiInput.addListener('noteon', "all",
             function (e) {
-              if (numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+              if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
                 this.phraseStartTime = Date.now();
               }
 
-              numNoteOnEvents++;
+              jobj.numNoteOnEvents++;
               var noteName = e.note.name;
               var noteOctave = e.note.octave;
               var noteNameOctave = noteName + noteOctave;
               var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
-              console.log("Received 'noteon' message (" + noteNameOctave + ", " + numNoteOnEvents + ").");
+              console.log("Received 'noteon' message (" + noteNameOctave + ", " + jobj.numNoteOnEvents + ").");
 
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
@@ -298,11 +308,15 @@ var vm = Vue.component('piano-component', {
               //jobj.playnote(toyPianoPitchNum, 1);
               jobj.addnotedelayed(toyPianoPitchNum, 0);
 
-              if (numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+              if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
                 this.phraseEndTime = Date.now();
                 this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
                     (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor)|0;
                 this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
+
+                //jobj.numNoteOnEvents = 0;
+
+                jobj.jamming = true;
 
                 var basisState = jobj.noteToBasisState(noteName, noteOctave);
 
@@ -390,6 +404,7 @@ var vm = Vue.component('piano-component', {
 
                   jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 4);
                 }
+
               }
             }
           );
