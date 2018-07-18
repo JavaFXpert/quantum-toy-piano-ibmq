@@ -305,8 +305,16 @@ var vm = Vue.component('piano-component', {
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
-              //jobj.playnote(toyPianoPitchNum, 1);
-              jobj.addnotedelayed(toyPianoPitchNum, 0);
+              if (!jobj.jamming) {
+                jobj.addnotedelayed(toyPianoPitchNum, 0);
+              }
+              else {
+                // if user played a note while QC was jamming, play the note but don't respond
+                jobj.playnote(toyPianoPitchNum, 1);
+                jobj.numNoteOnEvents--;
+                return;
+              }
+
 
               if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
                 this.phraseEndTime = Date.now();
