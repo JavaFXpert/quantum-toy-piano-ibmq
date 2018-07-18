@@ -24,7 +24,7 @@ for(var i=0;i<soundpack_index.length;i++){
   soundpack.push({
     number: soundpack_index[i],
     //url: "https://awiclass.monoame.com/pianosound/set/"+ soundpack_index[i]+".wav"
-    url: "piano-sounds/"+ soundpack_index[i]+".wav"
+    url: "piano-sounds/"+ soundpack_index[i]+"-st.wav"
   });
 }
 
