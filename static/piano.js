@@ -60,8 +60,10 @@ var vm = Vue.component('piano-component', {
         '<button @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
-        '<button @click="jam(4)">Jam Four</button>' +
-        '<button @click="jam(5)">Jam Five</button>' +
+        '<button @click="jam(2)">J2</button>' +
+        '<button @click="jam(3)">J3</button>' +
+        '<button @click="jam(4)">J4</button>' +
+        '<button @click="jam(5)">J5</button>' +
         '<button v-if="jamming">JAMMING...<i class="fa fa-play"></i></button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
@@ -258,20 +260,19 @@ var vm = Vue.component('piano-component', {
        userPhraseBeats is number of beats out of 8 that the user will play in each phrase
      */
     jam: function(userPhraseBeats) {
-      var jobj = this;
       this.measurements = $.extend(true, {}, this.measurementsOriginal);
       this.numNoteOnEvents = 0;
 
       this.jamming = false;
 
-      // Constant for total number of beats in shared phrase between user and QC
-      var numBeatsInSharedPhrase = 8;
+      // Variable for total number of beats in shared phrase between user and QC
+      var numBeatsInSharedPhrase = userPhraseBeats >= 4 ? 8 : userPhraseBeats * 2;
 
       numBeatsUserPlaysInPhrase = userPhraseBeats;
 
       numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
-      quarterNoteDurationMax = 300;
+      quarterNoteDurationMax = 250;
 
       // Constant quarter note duration factor
       var quarterNoteDurationFactor = 0.25;
@@ -279,6 +280,8 @@ var vm = Vue.component('piano-component', {
       this.notes = [];
       this.stopplay();
       this.startplay();
+
+      var jobj = this;
       WebMidi.enable(function (err) {
 
         if (err) {
@@ -330,7 +333,7 @@ var vm = Vue.component('piano-component', {
 
 
                 if (numBeatsUserPlaysInPhrase == 5) {
-                  // Play harmony on the down beat
+                  // Play harmony on the user's down beat
                   // Get harmony note for note that user played
                   var measHarmonyBasisState = jobj.popMeas(basisState, true);
                   console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
@@ -347,7 +350,7 @@ var vm = Vue.component('piano-component', {
 
                 // Get melody note to follow note that user played
                 var measMelodyBasisState = jobj.popMeas(basisState, false);
-                console.log('popMeas melody1 for' + measHarmonyBasisState + ": " + measMelodyBasisState);
+                console.log('popMeas melody1 for' + basisState + ": " + measMelodyBasisState);
 
                 var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
@@ -358,8 +361,8 @@ var vm = Vue.component('piano-component', {
                 jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration);
 
 
-                if (numBeatsQcPlaysInPhrase == 4) {
-                  // Play harmony on the down beat
+                if (numBeatsUserPlaysInPhrase != 5) {
+                  // Play harmony on the QC down beat
                   // Get harmony note for melody note
                   var measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
                   console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
@@ -374,30 +377,35 @@ var vm = Vue.component('piano-component', {
                 }
 
 
-                // Get 2nd melody note to follow 1st melody note
-                measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
-                console.log('popMeas melody2 for' + measHarmonyBasisState + ": " + measMelodyBasisState);
+                // TODO: Refactor following blocks into a loop
+                if (numBeatsQcPlaysInPhrase >= 2) {
+                    // Get 2nd melody note to follow 1st melody note
+                    measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
+                    console.log('popMeas melody2 for' + measHarmonyBasisState + ": " + measMelodyBasisState);
 
-                melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
+                    melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
-                melodyToyPianoPitchNum =
-                    jobj.noteToToyPianoPitch(melodyNoteNameOctave);
-                console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
+                    melodyToyPianoPitchNum =
+                        jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                    console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 2);
+                    jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 2);
+                }
 
 
-                // Get 3rd melody note to follow 2st melody note
-                measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
-                console.log('popMeas melody2 for' + measHarmonyBasisState + ": " + measMelodyBasisState);
+                if (numBeatsQcPlaysInPhrase >= 3) {
+                    // Get 3rd melody note to follow 2st melody note
+                    measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
+                    console.log('popMeas melody2 for' + measHarmonyBasisState + ": " + measMelodyBasisState);
 
-                melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
+                    melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
-                melodyToyPianoPitchNum =
-                    jobj.noteToToyPianoPitch(melodyNoteNameOctave);
-                console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
+                    melodyToyPianoPitchNum =
+                        jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                    console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
+                    jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
+                }
 
                 if (numBeatsQcPlaysInPhrase >= 4) {
                   // Get 4th melody note to follow 3rd melody note
