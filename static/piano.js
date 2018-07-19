@@ -159,7 +159,10 @@ var vm = Vue.component('piano-component', {
         {num: 28, key: 85, type: 'white'},
         {num: 29, key: 73, type: 'white'}
       ],
-      pitches: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'', 'C\'\''],
+      pitches: ['c', 'd', 'e', 'f', 'g', 'a', 'b',
+        'C', 'D', 'E', 'F', 'G', 'A', 'B',
+        'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'',
+        'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\''],
       numNoteOnEvents: 0,
       measurements: {},
       measurementsOriginal: {},
