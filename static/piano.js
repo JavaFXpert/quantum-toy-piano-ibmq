@@ -60,6 +60,7 @@ var vm = Vue.component('piano-component', {
         '<button @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
+        '<button @click="jam(1)">J1</button>' +
         '<button @click="jam(2)">J2</button>' +
         '<button @click="jam(3)">J3</button>' +
         '<button @click="jam(4)">J4</button>' +
@@ -273,6 +274,7 @@ var vm = Vue.component('piano-component', {
       numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
       quarterNoteDurationMax = 250;
+      quarterNoteDurationDefault = 150;
 
       // Constant quarter note duration factor
       var quarterNoteDurationFactor = 0.25;
@@ -321,10 +323,14 @@ var vm = Vue.component('piano-component', {
 
               if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
                 this.phraseEndTime = Date.now();
-                this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
-                    (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor)|0;
-                this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
-
+                if (numBeatsUserPlaysInPhrase == 1) {
+                  this.quarterNoteDuration = quarterNoteDurationDefault;
+                }
+                else {
+                  this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
+                    (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor) | 0;
+                  this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
+                }
                 //jobj.numNoteOnEvents = 0;
 
                 jobj.jamming = true;
