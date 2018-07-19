@@ -19,7 +19,10 @@
 // };
 
 var soundpack=[];
-var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,8,8.5,9,9.5,10,11,11.5,12,12.5,13,13.5,14,15];
+var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,
+  8,8.5,9,9.5,10,11,11.5,12,12.5,13,13.5,14,
+  15,15.5,16,16.5,17,18,18.5,19,19.5,20,20.5,21,
+  22,22.5,23,23.5,24,25,25.5,26,26.5,27,27.5,28,29];
 for(var i=0;i<soundpack_index.length;i++){
   soundpack.push({
     number: soundpack_index[i],
@@ -104,6 +107,7 @@ var vm = Vue.component('piano-component', {
       player: null,
       recorder: null,
       initial_pitch_idx: 0, // Zero-based initial pitch index for generating counterpoint
+      //TODO: Consider removing key attribute in display_keys
       display_keys: [
         {num: 1, key: 90, type: 'white'},
         {num: 1.5, key: 83, type: 'black'},
@@ -129,7 +133,31 @@ var vm = Vue.component('piano-component', {
         {num: 13, key: 89, type: 'white'},
         {num: 13.5, key: 55, type: 'black'},
         {num: 14, key: 85, type: 'white'},
-        {num: 15, key: 73, type: 'white'}
+        {num: 15, key: 73, type: 'white'},
+        {num: 15.5, key: 83, type: 'black'},
+        {num: 16, key: 88, type: 'white'},
+        {num: 16.5, key: 68, type: 'black'},
+        {num: 17, key: 67, type: 'white'},
+        {num: 18, key: 86, type: 'white'},
+        {num: 18.5, key: 71, type: 'black'},
+        {num: 19, key: 66, type: 'white'},
+        {num: 19.5, key: 72, type: 'black'},
+        {num: 20, key: 78, type: 'white'},
+        {num: 20.5, key: 74, type: 'black'},
+        {num: 21, key: 77, type: 'white'},
+        {num: 22, key: 81, type: 'white'},
+        {num: 22.5, key: 50, type: 'black'},
+        {num: 23, key: 87, type: 'white'},
+        {num: 23.5, key: 51, type: 'black'},
+        {num: 24, key: 69, type: 'white'},
+        {num: 25, key: 82, type: 'white'},
+        {num: 25.5, key: 53, type: 'black'},
+        {num: 26, key: 84, type: 'white'},
+        {num: 26.5, key: 54, type: 'black'},
+        {num: 27, key: 89, type: 'white'},
+        {num: 27.5, key: 55, type: 'black'},
+        {num: 28, key: 85, type: 'white'},
+        {num: 29, key: 73, type: 'white'}
       ],
       pitches: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'', 'C\'\''],
       numNoteOnEvents: 0,
