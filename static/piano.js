@@ -551,21 +551,26 @@ var vm = Vue.component('piano-component', {
        Returns: Toy piano pitch for note and octave
      */
     noteToToyPianoPitch: function(nameOctave) {
-      // TODO: Support more octaves
       //var noteMidiNumber = WebMidi.noteNameToNumber(name + octave);
       var toyPianoNoteOffset = 0;
       var toyPianoNoteNum = 0;
       var naturalName = nameOctave.slice(0, 1)
       var sharp = nameOctave.length == 3 && nameOctave.slice(1, 2) === "#";
       var octave = +(nameOctave.slice(-1));
-      if (octave <= 3) {
+      if (octave <= 2) {
         toyPianoNoteOffset = 0;
       }
-      else if (octave == 4) {
+      else if (octave == 3) {
         toyPianoNoteOffset = 7;
       }
-      else if (octave >= 5 & naturalName === "C") {
+      else if (octave == 4) {
         toyPianoNoteOffset = 14;
+      }
+      else if (octave == 5) {
+        toyPianoNoteOffset = 21;
+      }
+      else if (octave >= 6 & naturalName === "C") {
+        toyPianoNoteOffset = 28;
       }
       if (naturalName === "C") {
         toyPianoNoteNum = 1;
