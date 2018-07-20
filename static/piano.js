@@ -18,17 +18,28 @@
 //   meas: []
 // };
 
+var numInstruments = 2;
+var instrumentsOffset = 30;
+var userInstrument = 0;
+var qcInstrument = 1;
 var soundpack=[];
 var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,
   8,8.5,9,9.5,10,11,11.5,12,12.5,13,13.5,14,
   15,15.5,16,16.5,17,18,18.5,19,19.5,20,20.5,21,
   22,22.5,23,23.5,24,25,25.5,26,26.5,27,27.5,28,29];
-for(var i=0;i<soundpack_index.length;i++){
-  soundpack.push({
-    number: soundpack_index[i],
-    //url: "https://awiclass.monoame.com/pianosound/set/"+ soundpack_index[i]+".wav"
-    url: "piano-sounds/"+ soundpack_index[i]+"-st.wav"
-  });
+for (var instNum = 0; instNum < numInstruments; instNum++) {
+  for (var i = 0; i < soundpack_index.length; i++) {
+    soundpack.push({
+      number: soundpack_index[i],
+      url: "piano-sounds/" + soundpack_index[i] + "-st.wav"
+    });
+  }
+  for (var i = 0; i < soundpack_index.length; i++) {
+    soundpack.push({
+      number: soundpack_index[i] + instrumentsOffset,
+      url: "cello-sounds/" + soundpack_index[i] + "-ce.wav"
+    });
+  }
 }
 
 var vm = Vue.component('piano-component', {
@@ -162,7 +173,12 @@ var vm = Vue.component('piano-component', {
       pitches: ['c', 'd', 'e', 'f', 'g', 'a', 'b',
         'C', 'D', 'E', 'F', 'G', 'A', 'B',
         'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'',
-        'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\''],
+        'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\'',
+        'c', 'd', 'e', 'f', 'g', 'a', 'b',
+        'C', 'D', 'E', 'F', 'G', 'A', 'B',
+        'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'',
+        'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\''
+      ],
       numNoteOnEvents: 0,
       measurements: {},
       measurementsOriginal: {},
@@ -338,7 +354,7 @@ var vm = Vue.component('piano-component', {
               var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
               console.log("Received 'noteon' message (" + noteNameOctave + ", " + jobj.numNoteOnEvents + ").");
 
-              var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave);
+              var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave, userInstrument);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
               if (!jobj.jamming) {
@@ -377,7 +393,7 @@ var vm = Vue.component('piano-component', {
                   var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
 
                   var harmonyToyPianoPitchNum =
-                      jobj.noteToToyPianoPitch(harmonyNoteNameOctave);
+                      jobj.noteToToyPianoPitch(harmonyNoteNameOctave, qcInstrument);
                   console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
 
                   jobj.addnotedelayed(harmonyToyPianoPitchNum, 0);
@@ -391,7 +407,7 @@ var vm = Vue.component('piano-component', {
                 var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                 var melodyToyPianoPitchNum =
-                    jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                    jobj.noteToToyPianoPitch(melodyNoteNameOctave, qcInstrument);
                 console.log('melodyToyPianoPitchNum 1: ' + melodyToyPianoPitchNum);
 
                 jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration);
@@ -406,7 +422,7 @@ var vm = Vue.component('piano-component', {
                   var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
 
                   var harmonyToyPianoPitchNum =
-                      jobj.noteToToyPianoPitch(harmonyNoteNameOctave);
+                      jobj.noteToToyPianoPitch(harmonyNoteNameOctave, qcInstrument);
                   console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
 
                   jobj.addnotedelayed(harmonyToyPianoPitchNum, 0);
@@ -422,7 +438,7 @@ var vm = Vue.component('piano-component', {
                     melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                     melodyToyPianoPitchNum =
-                        jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                        jobj.noteToToyPianoPitch(melodyNoteNameOctave, qcInstrument);
                     console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
                     jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 2);
@@ -437,7 +453,7 @@ var vm = Vue.component('piano-component', {
                     melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                     melodyToyPianoPitchNum =
-                        jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                        jobj.noteToToyPianoPitch(melodyNoteNameOctave, qcInstrument);
                     console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
                     jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
@@ -451,7 +467,7 @@ var vm = Vue.component('piano-component', {
                   melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                   melodyToyPianoPitchNum =
-                      jobj.noteToToyPianoPitch(melodyNoteNameOctave);
+                      jobj.noteToToyPianoPitch(melodyNoteNameOctave, qcInstrument);
                   console.log('melodyToyPianoPitchNum 3: ' + melodyToyPianoPitchNum);
 
                   jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 4);
@@ -552,7 +568,7 @@ var vm = Vue.component('piano-component', {
        Inputs: Note name including octave (e.g. "C4")
        Returns: Toy piano pitch for note and octave
      */
-    noteToToyPianoPitch: function(nameOctave) {
+    noteToToyPianoPitch: function(nameOctave, instrumentIndex) {
       //var noteMidiNumber = WebMidi.noteNameToNumber(name + octave);
       var toyPianoNoteOffset = 0;
       var toyPianoNoteNum = 0;
@@ -607,7 +623,7 @@ var vm = Vue.component('piano-component', {
         toyPianoNoteNum += 0.5
       }
 
-      return toyPianoNoteNum;
+      return instrumentIndex * instrumentsOffset  + toyPianoNoteNum;
     },
 
     popMeas: function(basisState, harmony) {
