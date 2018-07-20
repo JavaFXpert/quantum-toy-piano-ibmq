@@ -19,7 +19,7 @@
 // };
 
 var numInstruments = 2;
-var instrumentsOffset = 30;
+var instrumentsOffset = 29;
 var userInstrument = 0;
 var qcInstrument = 1;
 var soundpack=[];
@@ -37,7 +37,7 @@ for (var instNum = 0; instNum < numInstruments; instNum++) {
   for (var i = 0; i < soundpack_index.length; i++) {
     soundpack.push({
       number: soundpack_index[i] + instrumentsOffset,
-      url: "cello-sounds/" + soundpack_index[i] + "-ce.wav"
+      url: "acoustic-guitar/" + soundpack_index[i] + "-ag.wav"
     });
   }
 }
