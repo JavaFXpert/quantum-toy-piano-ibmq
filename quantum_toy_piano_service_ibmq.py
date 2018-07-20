@@ -376,7 +376,7 @@ def create_toy_piano(melody_note_nums, harmony_note_nums):
     latest_melody_idx = 0
     latest_harmony_idx = 0
     num_pitches_in_octave = 7
-    toy_piano_pitch_offset = 1
+    toy_piano_pitch_offset = 8
 
     for idx, pitch in enumerate(melody_note_nums):
         notes.append({"num": pitch + toy_piano_pitch_offset, "time": idx * quarter_note_dur * 2})

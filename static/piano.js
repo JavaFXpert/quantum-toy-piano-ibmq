@@ -362,7 +362,6 @@ var vm = Vue.component('piano-component', {
                     (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor) | 0;
                   this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
                 }
-                //jobj.numNoteOnEvents = 0;
 
                 jobj.jamming = true;
 
@@ -484,7 +483,7 @@ var vm = Vue.component('piano-component', {
       var basisState;
       var naturalNoteName = name.substring(0, 1);
       if (naturalNoteName === "C") {
-        if (octave <= 3) {
+        if (octave >= 4) {
           basisState = "000";
         }
         else {
@@ -572,9 +571,15 @@ var vm = Vue.component('piano-component', {
       else if (octave == 5) {
         toyPianoNoteOffset = 21;
       }
-      else if (octave >= 6 & naturalName === "C") {
-        toyPianoNoteOffset = 28;
+      else if (octave >= 6) {
+        if (naturalName === "C") {
+          toyPianoNoteOffset = 28;
+        }
+        else {
+          toyPianoNoteOffset = 21;
+        }
       }
+
       if (naturalName === "C") {
         toyPianoNoteNum = 1;
       }
