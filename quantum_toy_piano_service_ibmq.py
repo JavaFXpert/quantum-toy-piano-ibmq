@@ -81,8 +81,10 @@ def toy_piano_counterpoint():
     species = int(request.args['species'])
 
     melodic_degrees = request.args['melodic_degrees'].split(",")
+    print("melodic_degrees: ", melodic_degrees);
 
     harmonic_degrees = request.args['harmonic_degrees'].split(",")
+    print("harmonic_degrees: ", harmonic_degrees);
 
     use_simulator = request.args['use_simulator'].lower() == "true"
     print()

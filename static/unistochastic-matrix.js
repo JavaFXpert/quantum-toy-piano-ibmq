@@ -34,7 +34,7 @@ var rv = {
   ],
 
   // Specified resolution of rotation angle degrees at a time to move when optimizing unistochastic matrix
-  degreedecimals: 0,
+  degreedecimals: 1,
 
   // Specified number of iterations over the rotational angles when optimizing unistochastic matrix
   numepochs: 20,
@@ -120,11 +120,15 @@ Vue.component('unistochastic-matrix', {
             '<td v-for="(scol, scolIdx) in 2">' +
               '<label>{{rv.rotationangles [(srowIdx) * 2 + (scolIdx)].label}}</label>' +
               '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -rv.degreedecimals)" class="rot-slider">' +
-              // '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
+              //'<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
             '</td>' +
           '</tr>' +
         '</tbody>' +
       '</table>' +
+      '<button @click="preset(0)">Asc</button>' +
+      '<button @click="preset(1)">Desc</button>' +
+      '<button @click="preset(2)">Cpnt</button>' +
+      '<button @click="preset(3)">Bell</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -141,6 +145,31 @@ Vue.component('unistochastic-matrix', {
       // resorting to the following hack
       rv.rotationangles [0].value = 359 - rv.rotationangles [0].value;
       rv.rotationangles [0].value = 359 - rv.rotationangles [0].value;
+    },
+
+    preset: function(presetnum) {
+      if (presetnum == 0) {
+        // Ascending melody
+        this.setrotationangles(['50.5', '238', '270', '215', '199.7', '205.7']);
+      }
+      else if (presetnum == 1) {
+        // Descending melody
+        this.setrotationangles(['90', '180', '180', '90', '180', '90']);
+      }
+      else if (presetnum == 2) {
+        // Minimal counterpoint style
+        this.setrotationangles(['246.7', '215.1', '160.3', '221.6', '180.7', '118.2']);
+      }
+      else if (presetnum == 3) {
+        // Bell states
+        this.setrotationangles([180, 225, 0, 0, 225, 90]);
+      }
+    },
+
+    setrotationangles: function(rotations) {
+      for (var i = 0; i < rotationDegOfFreedom; i++) {
+        rv.rotationangles[i].value = rotations[i];
+      }
     },
 
     optimizerotationangles: function() {
