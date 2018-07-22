@@ -120,7 +120,7 @@ Vue.component('unistochastic-matrix', {
             '<td v-for="(scol, scolIdx) in 2">' +
               '<label>{{rv.rotationangles [(srowIdx) * 2 + (scolIdx)].label}}</label>' +
               '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -rv.degreedecimals)" class="rot-slider">' +
-              //'<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
+              // '<input type="range" v-model="rv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="22.5" class="rot-slider">' +
             '</td>' +
           '</tr>' +
         '</tbody>' +
@@ -174,9 +174,7 @@ Vue.component('unistochastic-matrix', {
 
     optimizerotationangles: function() {
       var angles180DegreeArray = Array(rotationDegOfFreedom).fill(180);
-      for (var i = 0; i < rotationDegOfFreedom; i++) {
-        rv.rotationangles[i].value = angles180DegreeArray[i];
-      }
+      this.setrotationangles(angles180DegreeArray)
 
       var solutionInRad = this.optimizeRotationAngles(this.loss);
       var solutionInDeg = Array(rotationDegOfFreedom).fill(0);

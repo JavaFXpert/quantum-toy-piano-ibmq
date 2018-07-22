@@ -34,7 +34,7 @@ var hrv = {
   ],
 
   // Specified resolution of rotation angle degrees at a time to move when optimizing unistochastic matrix
-  degreedecimals: 0,
+  degreedecimals: 1,
 
   // Specified number of iterations over the rotational angles when optimizing unistochastic matrix
   numepochs: 20,
@@ -124,6 +124,9 @@ Vue.component('unistochastic-harmony-matrix', {
           '</tr>' +
         '</tbody>' +
       '</table>' +
+      '<button @click="preset(0)">3rds</button>' +
+      '<button @click="preset(2)">Cpnt</button>' +
+      '<button @click="preset(3)">Bell</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -142,11 +145,30 @@ Vue.component('unistochastic-harmony-matrix', {
       hrv.rotationangles [0].value = 359 - hrv.rotationangles [0].value;
     },
 
+    preset: function(presetnum) {
+      if (presetnum == 0) {
+        // Thirds & sixths harmonic intervals
+        this.setrotationangles(['225', '270', '180', '165', '270', '150']);
+      }
+      else if (presetnum == 2) {
+        // Minimal counterpoint style
+        this.setrotationangles(['180', '230.8', '180.3', '182.4', '230.7', '177.7']);
+      }
+      else if (presetnum == 3) {
+        // Bell states
+        this.setrotationangles([180, 225, 0, 0, 225, 90]);
+      }
+    },
+
+    setrotationangles: function(rotations) {
+      for (var i = 0; i < rotationDegOfFreedom; i++) {
+        hrv.rotationangles[i].value = rotations[i];
+      }
+    },
+
     optimizerotationangles: function() {
       var angles180DegreeArray = Array(rotationDegOfFreedom).fill(180);
-      for (var i = 0; i < rotationDegOfFreedom; i++) {
-        hrv.rotationangles[i].value = angles180DegreeArray[i];
-      }
+      this.setrotationangles(angles180DegreeArray)
 
       var solutionInRad = this.optimizeRotationAngles(this.loss);
       var solutionInDeg = Array(rotationDegOfFreedom).fill(0);
