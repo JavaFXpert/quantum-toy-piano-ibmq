@@ -282,20 +282,28 @@ var vm = Vue.component('piano-component', {
       this.notes = [];
       this.stopplay();
       var quantum_music_host = "http://localhost:5002";
-      harmonyDegrees = [];
-      melodyDegrees = [];
+
+      var melodyDegrees = [];
+      var harmonyDegrees = [];
+
       for (var idx = 0; idx < rotationDegOfFreedom; idx++) {
-        harmonyDegrees.push(rv.rotationangles[idx].value);
-        melodyDegrees.push(hrv.rotationangles[idx].value);
+        melodyDegrees.push(rv.rotationangles[idx].value);
+        if (hrv.harmonyenabled) {
+          harmonyDegrees.push(hrv.rotationangles[idx].value);
+        }
       }
-      harmonyDegreesStr = harmonyDegrees.join(",");
-      melodyDegreesStr = melodyDegrees.join(",");
+
+      var melodyDegreesStr = melodyDegrees.join(",");
+      var harmonyDegreesStr = "";
+      if (hrv.harmonyenabled) {
+        harmonyDegreesStr = harmonyDegrees.join(",");
+      }
 
       var vobj = this;
       axios.get(quantum_music_host +
           "/toy_piano_counterpoint?pitch_index=" + this.initial_pitch_idx + "&species=" + species_arg +
-          "&melodic_degrees=" + harmonyDegreesStr +
-          "&harmonic_degrees=" + melodyDegreesStr +
+          "&melodic_degrees=" + melodyDegreesStr +
+          "&harmonic_degrees=" + harmonyDegreesStr +
           "&use_simulator=" + this.usesimulator)
           .then(function (response) {
             vobj.load_notes_from_response(response);
