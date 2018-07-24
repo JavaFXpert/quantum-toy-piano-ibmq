@@ -22,6 +22,7 @@ var numInstruments = 3;
 var instrumentsOffset = 29;
 var userInstrument = 0;
 var qcInstrument = 1;
+var bellInstrument = 2;
 var soundpack=[];
 var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,
   8,8.5,9,9.5,10,11,11.5,12,12.5,13,13.5,14,
@@ -307,6 +308,13 @@ var vm = Vue.component('piano-component', {
 
     load_notes_from_response: function(resp) {
       console.log(resp)
+
+      if (rv.bellState && hrv.bellState) {
+        for (var idx in resp.data.toy_piano) {
+          resp.data.toy_piano[idx].num += (bellInstrument * instrumentsOffset);
+        }
+      }
+
       this.notes = resp.data.toy_piano;
       this.measurementsOriginal = resp.data.full_res_dict;
       this.measurements = $.extend(true, {}, this.measurementsOriginal);

@@ -50,7 +50,10 @@ var rv = {
   addedpenalty: 0.0,
 
   // Calculated total cost between desired matrix and unistochastic matrix
-  totalcostbetweenmatrices: 0.0
+  totalcostbetweenmatrices: 0.0,
+
+  // Melody is in Bell state
+  bellState: false
 };
 
 // register the unistochastic-matrix component
@@ -148,6 +151,7 @@ Vue.component('unistochastic-matrix', {
     },
 
     preset: function(presetnum) {
+      rv.bellState = false;
       if (presetnum == 0) {
         // Ascending melody
         this.setrotationangles(['50.5', '238', '270', '215', '199.7', '205.7']);
@@ -163,6 +167,7 @@ Vue.component('unistochastic-matrix', {
       else if (presetnum == 3) {
         // Bell states
         this.setrotationangles([180, 225, 0, 0, 225, 90]);
+        rv.bellState = true;
       }
     },
 
@@ -173,6 +178,7 @@ Vue.component('unistochastic-matrix', {
     },
 
     optimizerotationangles: function() {
+      rv.bellState = false;
       var angles180DegreeArray = Array(rotationDegOfFreedom).fill(180);
       this.setrotationangles(angles180DegreeArray)
 

@@ -50,7 +50,11 @@ var hrv = {
   addedpenalty: 0.0,
 
   // Calculated total cost between desired matrix and unistochastic matrix
-  totalcostbetweenmatrices: 0.0
+  totalcostbetweenmatrices: 0.0,
+
+  // Harmony is in Bell state
+  bellState: false
+
 };
 
 // register the unistochastic-harmony-matrix component
@@ -146,6 +150,7 @@ Vue.component('unistochastic-harmony-matrix', {
     },
 
     preset: function(presetnum) {
+      hrv.bellState = false;
       if (presetnum == 0) {
         // Thirds & sixths harmonic intervals
         this.setrotationangles(['225', '270', '180', '165', '270', '150']);
@@ -157,6 +162,7 @@ Vue.component('unistochastic-harmony-matrix', {
       else if (presetnum == 3) {
         // Bell states
         this.setrotationangles([180, 225, 0, 0, 225, 90]);
+        hrv.bellState = true;
       }
     },
 
@@ -167,6 +173,7 @@ Vue.component('unistochastic-harmony-matrix', {
     },
 
     optimizerotationangles: function() {
+      hrv.bellState = false;
       var angles180DegreeArray = Array(rotationDegOfFreedom).fill(180);
       this.setrotationangles(angles180DegreeArray)
 
