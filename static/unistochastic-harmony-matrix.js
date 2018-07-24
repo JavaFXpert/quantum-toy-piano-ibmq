@@ -131,6 +131,7 @@ Vue.component('unistochastic-harmony-matrix', {
       '<button @click="preset(0)">3rds</button>' +
       '<button @click="preset(2)">Cpnt</button>' +
       '<button @click="preset(3)">Bell</button>' +
+      '<button @click="preset(4)">Iden</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -163,6 +164,11 @@ Vue.component('unistochastic-harmony-matrix', {
         // Bell states
         this.setrotationangles([180, 225, 0, 0, 225, 90]);
         hrv.bellState = true;
+      }
+      else if (presetnum == 4) {
+        // Identity matrix
+        this.setrotationangles([0, 0, 0, 0, 0, 0]);
+        rv.bellState = true;
       }
     },
 
