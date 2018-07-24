@@ -132,7 +132,8 @@ Vue.component('unistochastic-matrix', {
       '<button @click="preset(1)">Desc</button>' +
       '<button @click="preset(2)">Cpnt</button>' +
       '<button @click="preset(3)">Bell</button>' +
-      '<button @click="preset(4)">Iden</button>' +
+      '<button @click="preset(4)">Equ</button>' +
+      '<button @click="preset(5)">Iden</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -171,6 +172,10 @@ Vue.component('unistochastic-matrix', {
         rv.bellState = true;
       }
       else if (presetnum == 4) {
+        // Equal probabilities
+        this.setrotationangles(['224.9', '215.3', '210', '150.1', '215.3', '225']);
+      }
+      else if (presetnum == 5) {
         // Identity matrix
         this.setrotationangles([0, 0, 0, 0, 0, 0]);
         rv.bellState = true;

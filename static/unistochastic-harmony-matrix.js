@@ -136,7 +136,8 @@ Vue.component('unistochastic-harmony-matrix', {
       '<button @click="preset(0)" :disabled="hrv.harmonyenabled == false">3rds</button>' +
       '<button @click="preset(2)" :disabled="hrv.harmonyenabled == false">Cpnt</button>' +
       '<button @click="preset(3)" :disabled="hrv.harmonyenabled == false">Bell</button>' +
-      '<button @click="preset(4)" :disabled="hrv.harmonyenabled == false">Iden</button>' +
+      '<button @click="preset(4)" :disabled="hrv.harmonyenabled == false">Equ</button>' +
+      '<button @click="preset(5)" :disabled="hrv.harmonyenabled == false">Iden</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -175,6 +176,10 @@ Vue.component('unistochastic-harmony-matrix', {
         hrv.bellState = true;
       }
       else if (presetnum == 4) {
+        // Equal probabilities
+        this.setrotationangles(['224.9', '215.3', '210', '150.1', '215.3', '225']);
+      }
+      else if (presetnum == 5) {
         // Identity matrix
         this.setrotationangles([0, 0, 0, 0, 0, 0]);
         rv.bellState = true;
