@@ -18,7 +18,7 @@
 //   meas: []
 // };
 
-var numInstruments = 2;
+var numInstruments = 3;
 var instrumentsOffset = 29;
 var userInstrument = 0;
 var qcInstrument = 1;
@@ -28,16 +28,22 @@ var soundpack_index=[1,1.5,2,2.5,3,4,4.5,5,5.5,6,6.5,7,
   15,15.5,16,16.5,17,18,18.5,19,19.5,20,20.5,21,
   22,22.5,23,23.5,24,25,25.5,26,26.5,27,27.5,28,29];
 for (var instNum = 0; instNum < numInstruments; instNum++) {
-  for (var i = 0; i < soundpack_index.length; i++) {
+  for (var idxA = 0; idxA < soundpack_index.length; idxA++) {
     soundpack.push({
-      number: soundpack_index[i],
-      url: "piano-sounds/" + soundpack_index[i] + "-st.wav"
+      number: soundpack_index[idxA],
+      url: "piano-sounds/" + soundpack_index[idxA] + "-st.wav"
     });
   }
-  for (var i = 0; i < soundpack_index.length; i++) {
+  for (var idxB = 0; idxB < soundpack_index.length; idxB++) {
     soundpack.push({
-      number: soundpack_index[i] + instrumentsOffset,
-      url: "acoustic-guitar/" + soundpack_index[i] + "-ag.wav"
+      number: soundpack_index[idxB] + instrumentsOffset,
+      url: "acoustic-guitar/" + soundpack_index[idxB] + "-ag.wav"
+    });
+  }
+  for (var idxC = 0; idxC < soundpack_index.length; idxC++) {
+    soundpack.push({
+      number: soundpack_index[idxC] + instrumentsOffset * 2,
+      url: "bell-sounds/" + soundpack_index[idxC] + "-be.wav"
     });
   }
 }
@@ -171,6 +177,10 @@ var vm = Vue.component('piano-component', {
         {num: 29, key: 73, type: 'white'}
       ],
       pitches: ['c', 'd', 'e', 'f', 'g', 'a', 'b',
+        'C', 'D', 'E', 'F', 'G', 'A', 'B',
+        'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'',
+        'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\'',
+        'c', 'd', 'e', 'f', 'g', 'a', 'b',
         'C', 'D', 'E', 'F', 'G', 'A', 'B',
         'C\'', 'D\'', 'E\'', 'F\'', 'G\'', 'A\'', 'B\'',
         'C\'\'', 'D\'\'', 'E\'\'', 'F\'\'', 'G\'\'', 'A\'\'', 'B\'\'', 'C\'\'\'',
