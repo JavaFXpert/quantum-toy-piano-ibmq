@@ -53,7 +53,10 @@ var hrv = {
   totalcostbetweenmatrices: 0.0,
 
   // Harmony is in Bell state
-  bellState: false
+  bellState: false,
+
+  // Determines whether harmony is calculated for compositions and jamming
+  harmonyenabled: true
 
 };
 
@@ -79,7 +82,9 @@ Vue.component('unistochastic-harmony-matrix', {
       '<table>' +
         '<thead>' +
           '<tr>' +
-            '<th></th>' +
+            '<th>' +
+              '<input type="checkbox" @click="toggleharmony" checked="hrv.harmonyenabled"/>' +
+            '</th>' +
             '<th v-for="col in numrowscols">' +
               '{{colnames[col - 1]}}' +
             '</th>' +
@@ -96,8 +101,8 @@ Vue.component('unistochastic-harmony-matrix', {
       '</table>' +
       '<br/>' +
       '<div class="ml-2">' +
-        '<button @click="optimizerotationangles" class="mr-4">Optimize Rotations</button>' +
-        '<input type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni"/>' +
+        '<button @click="optimizerotationangles" class="mr-4" :disabled="hrv.harmonyenabled == false">Optimize Rotations</button>' +
+        '<input type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni" :disabled="hrv.harmonyenabled == false"/>' +
         '<label for="unistochastic" class="mr-4">&nbsp;Show Probabilities</label>' +
 
         // UNCOMMENT THE FOLLOWING LINES TO MAKE THE FINE TUNING CONTROLS APPEAR
@@ -123,15 +128,15 @@ Vue.component('unistochastic-harmony-matrix', {
           '<tr v-for="(srow, srowIdx) in 3">' +
             '<td v-for="(scol, scolIdx) in 2">' +
               '<label>{{hrv.rotationangles [(srowIdx) * 2 + (scolIdx)].label}}</label>' +
-              '<input type="range" v-model="hrv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -hrv.degreedecimals)" class="rot-slider">' +
+              '<input type="range" v-model="hrv.rotationangles [(srowIdx) * 2 + (scolIdx)].value" min="0" max="359" :step="Math.pow(10, -hrv.degreedecimals)" class="rot-slider" :disabled="hrv.harmonyenabled == false">' +
             '</td>' +
           '</tr>' +
         '</tbody>' +
       '</table>' +
-      '<button @click="preset(0)">3rds</button>' +
-      '<button @click="preset(2)">Cpnt</button>' +
-      '<button @click="preset(3)">Bell</button>' +
-      '<button @click="preset(4)">Iden</button>' +
+      '<button @click="preset(0)" :disabled="hrv.harmonyenabled == false">3rds</button>' +
+      '<button @click="preset(2)" :disabled="hrv.harmonyenabled == false">Cpnt</button>' +
+      '<button @click="preset(3)" :disabled="hrv.harmonyenabled == false">Bell</button>' +
+      '<button @click="preset(4)" :disabled="hrv.harmonyenabled == false">Iden</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {
@@ -148,6 +153,10 @@ Vue.component('unistochastic-harmony-matrix', {
       // resorting to the following hack
       hrv.rotationangles [0].value = 359 - hrv.rotationangles [0].value;
       hrv.rotationangles [0].value = 359 - hrv.rotationangles [0].value;
+    },
+
+    toggleharmony: function () {
+      hrv.harmonyenabled = !(hrv.harmonyenabled);
     },
 
     preset: function(presetnum) {
