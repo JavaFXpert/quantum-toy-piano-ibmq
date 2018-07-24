@@ -317,9 +317,11 @@ var vm = Vue.component('piano-component', {
     load_notes_from_response: function(resp) {
       console.log(resp)
 
-      if (rv.bellState && hrv.bellState) {
-        for (var idx in resp.data.toy_piano) {
-          resp.data.toy_piano[idx].num += (bellInstrument * instrumentsOffset);
+      if (rv.bellState) {
+        if (hrv.bellState || !hrv.harmonyenabled) {
+          for (var idx in resp.data.toy_piano) {
+            resp.data.toy_piano[idx].num += (bellInstrument * instrumentsOffset);
+          }
         }
       }
 
@@ -653,7 +655,13 @@ var vm = Vue.component('piano-component', {
     },
 
     getQcInstrument: function() {
-      return (rv.bellState && hrv.bellState) ? bellInstrument : qcInstrument;
+      var instrument = qcInstrument;
+      if (rv.bellState) {
+        if (hrv.bellState || !hrv.harmonyenabled) {
+          instrument = bellInstrument;
+        }
+      }
+      return instrument;
     },
 
     popMeas: function(basisState, harmony) {

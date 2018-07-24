@@ -140,7 +140,7 @@ def toy_piano_counterpoint():
         num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
 
         # TODO: LEFT OFF HERE
-        num_required_harmonic_circuits_per_pitch = 7 if harmonyenabled else 0
+        num_required_harmonic_circuits_per_pitch = (7 if harmonyenabled else 0)
 
         # input_pitch = 0
         for pitch_idx in range(0, DIATONIC_SCALE_OCTAVE_PITCHES):
@@ -365,15 +365,21 @@ def pitch_letter_by_index(pitch_idx):
 
 # Produce output for Lilypond
 def create_lilypond(melody_note_nums, harmony_note_nums, composer):
+    num_pitches_in_octave = 7
     harmony_notes_fact = int(len(harmony_note_nums) / len(melody_note_nums))
-    retval = "\\version \"2.18.2\" \\paper {#(set-paper-size \"a5\")} \\header {title=\"Schrodinger's Cat\" subtitle=\"on a Toy Piano\" composer = \"" + composer + "\"}  melody = \\absolute { \\clef \"bass\" \\numericTimeSignature \\time 4/4 \\tempo 4 = 100"
+    harmonyenabled = harmony_notes_fact > 0
+    retval = "\\version \"2.18.2\" \\paper {#(set-paper-size \"a5\")} " +\
+             " \\header {title=\"Schrodinger's Cat\" subtitle=\"on a Toy Piano\" composer = \"" + composer + "\"} " + \
+             " melody = \\absolute { \\clef " + \
+             (" \"bass\" " if harmonyenabled else " \"treble\" ") + \
+             " \\numericTimeSignature \\time 4/4 \\tempo 4 = 100"
     for pitch in melody_note_nums:
-        retval += " " + pitch_letter_by_index(pitch) + "2"
+        retval += " " + pitch_letter_by_index(pitch) + ("" if harmonyenabled else "'") + ("2" if harmonyenabled else "4")
 
     # Add the same pitch to the end of the melody as in the beginning
-    retval += " " + pitch_letter_by_index(melody_note_nums[0]) + "2"
+    retval += " " + pitch_letter_by_index(melody_note_nums[0]) + ("" if harmonyenabled else "'") + ("2" if harmonyenabled else "4")
 
-    if harmony_notes_fact > 0:
+    if harmonyenabled:
         retval += "} harmony = \\absolute { \\clef \"treble\" \\numericTimeSignature \\time 4/4 "
         for pitch in harmony_note_nums:
             retval += " " + pitch_letter_by_index(pitch) + "'" + str(int(harmony_notes_fact * 2))
@@ -384,7 +390,7 @@ def create_lilypond(melody_note_nums, harmony_note_nums, composer):
 
     retval += "} \\score { << "
 
-    if harmony_notes_fact > 0:
+    if harmonyenabled:
         retval += " \\new Staff \\with {instrumentName = #\"Harmony\"}  { \\harmony } "
 
     retval += " \\new Staff \\with {instrumentName = #\"Melody\"}  { \\melody } >> }"
@@ -394,6 +400,7 @@ def create_lilypond(melody_note_nums, harmony_note_nums, composer):
 # Produce output for toy piano
 def create_toy_piano(melody_note_nums, harmony_note_nums):
     harmony_notes_fact = int(len(harmony_note_nums) / len(melody_note_nums))
+    harmonyenabled = harmony_notes_fact > 0
     quarter_note_dur = 150
     notes = []
     latest_melody_idx = 0
@@ -402,13 +409,13 @@ def create_toy_piano(melody_note_nums, harmony_note_nums):
     toy_piano_pitch_offset = 8
 
     for idx, pitch in enumerate(melody_note_nums):
-        notes.append({"num": pitch + toy_piano_pitch_offset, "time": idx * quarter_note_dur * 2})
+        notes.append({"num": pitch + toy_piano_pitch_offset + (0 if harmonyenabled else num_pitches_in_octave), "time": idx * quarter_note_dur * (2 if harmonyenabled else 1)})
         latest_melody_idx = idx
 
     # Add the same pitch to the end of the melody as in the beginning
-    notes.append({"num": melody_note_nums[0] + toy_piano_pitch_offset, "time": (latest_melody_idx + 1) * quarter_note_dur * 2})
+    notes.append({"num": melody_note_nums[0] + toy_piano_pitch_offset + (0 if harmonyenabled else num_pitches_in_octave), "time": (latest_melody_idx + 1) * quarter_note_dur * (2 if harmonyenabled else 1)})
 
-    if harmony_notes_fact > 0:
+    if harmonyenabled:
         for idx, pitch in enumerate(harmony_note_nums):
             notes.append({"num": pitch + num_pitches_in_octave + toy_piano_pitch_offset, "time": idx * quarter_note_dur * 2 / harmony_notes_fact})
             latest_harmony_idx = idx
