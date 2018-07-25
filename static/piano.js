@@ -87,6 +87,7 @@ var vm = Vue.component('piano-component', {
         '<button v-if="hasJamNotes" @click="jam(3)">J3</button>' +
         '<button v-if="hasJamNotes" @click="jam(4)">J4</button>' +
         '<button v-if="hasJamNotes" @click="jam(5)">J5</button>' +
+        '<button v-if="hasJamNotes&&useharmony()" @click="jam(10)">Jh</button>' +
         '<button v-if="jamming">JAMMING...<i class="fa fa-play"></i></button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
@@ -200,7 +201,8 @@ var vm = Vue.component('piano-component', {
       phraseStartTime: 0,
       phraseEndTime: 0,
       jamming: false,
-      hasJamNotes: false
+      hasJamNotes: false,
+      harmonyOnlyMode: false
     }
   },
   methods: {
@@ -341,7 +343,16 @@ var vm = Vue.component('piano-component', {
        Jam with the QC.
        userPhraseBeats is number of beats out of 8 that the user will play in each phrase
      */
-    jam: function(userPhraseBeats) {
+    jam: function(userPhraseBeatsArg) {
+      var userPhraseBeats = userPhraseBeatsArg;
+      this.harmonyOnlyMode = false;
+
+      // Test if user wants harmony-only mode
+      if (userPhraseBeats == 10) {
+        userPhraseBeats = 1;
+        this.harmonyOnlyMode = true;
+      }
+
       this.measurements = $.extend(true, {}, this.measurementsOriginal);
       this.numNoteOnEvents = 0;
 
@@ -354,8 +365,8 @@ var vm = Vue.component('piano-component', {
 
       numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
-      quarterNoteDurationMax = 250;
-      quarterNoteDurationDefault = 150;
+      var quarterNoteDurationMax = 250;
+      var quarterNoteDurationDefault = 150;
 
       // Constant quarter note duration factor
       var quarterNoteDurationFactor = 0.25;
@@ -419,7 +430,7 @@ var vm = Vue.component('piano-component', {
 
 
                 if (hrv.harmonyenabled) {
-                  if (numBeatsUserPlaysInPhrase == 5) {
+                  if (numBeatsUserPlaysInPhrase == 5 || jobj.harmonyOnlyMode) {
                     // Play harmony on the user's down beat
                     // Get harmony note for note that user played
                     var measHarmonyBasisState = jobj.popMeas(basisState, true);
@@ -435,6 +446,7 @@ var vm = Vue.component('piano-component', {
                   }
                 }
 
+                if (jobj.harmonyOnlyMode) return;
 
                 // Get melody note to follow note that user played
                 var measMelodyBasisState = jobj.popMeas(basisState, false);
@@ -669,6 +681,9 @@ var vm = Vue.component('piano-component', {
         if (hrv.bellState || !hrv.harmonyenabled) {
           instrument = bellInstrument;
         }
+      }
+      else if (hrv.bellState && this.harmonyOnlyMode) {
+        instrument = bellInstrument;
       }
       return instrument;
     },
