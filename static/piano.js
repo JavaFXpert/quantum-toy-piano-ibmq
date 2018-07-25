@@ -361,9 +361,9 @@ var vm = Vue.component('piano-component', {
       // Variable for total number of beats in shared phrase between user and QC
       var numBeatsInSharedPhrase = userPhraseBeats >= 4 ? 8 : userPhraseBeats * 2;
 
-      numBeatsUserPlaysInPhrase = userPhraseBeats;
+      this.numBeatsUserPlaysInPhrase = userPhraseBeats;
 
-      numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
+      this.numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
       var quarterNoteDurationMax = 250;
       var quarterNoteDurationDefault = 150;
@@ -388,7 +388,7 @@ var vm = Vue.component('piano-component', {
 
           midiInput.addListener('noteon', "all",
             function (e) {
-              if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+              if (jobj.numNoteOnEvents % jobj.numBeatsUserPlaysInPhrase == 0) {
                 this.phraseStartTime = Date.now();
               }
 
@@ -413,14 +413,14 @@ var vm = Vue.component('piano-component', {
               }
 
 
-              if (jobj.numNoteOnEvents % numBeatsUserPlaysInPhrase == 0) {
+              if (jobj.numNoteOnEvents % jobj.numBeatsUserPlaysInPhrase == 0) {
                 this.phraseEndTime = Date.now();
-                if (numBeatsUserPlaysInPhrase == 1) {
+                if (jobj.numBeatsUserPlaysInPhrase == 1) {
                   this.quarterNoteDuration = quarterNoteDurationDefault;
                 }
                 else {
                   this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
-                    (numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor) | 0;
+                    (jobj.numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor) | 0;
                   this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
                 }
 
@@ -430,7 +430,7 @@ var vm = Vue.component('piano-component', {
 
 
                 if (hrv.harmonyenabled) {
-                  if (numBeatsUserPlaysInPhrase == 5 || jobj.harmonyOnlyMode) {
+                  if (jobj.numBeatsUserPlaysInPhrase == 5 || jobj.harmonyOnlyMode) {
                     // Play harmony on the user's down beat
                     // Get harmony note for note that user played
                     var measHarmonyBasisState = jobj.popMeas(basisState, true);
@@ -462,7 +462,7 @@ var vm = Vue.component('piano-component', {
 
 
                 if (hrv.harmonyenabled) {
-                  if (numBeatsUserPlaysInPhrase != 5) {
+                  if (jobj.numBeatsUserPlaysInPhrase != 5) {
                     // Play harmony on the QC down beat
                     // Get harmony note for melody note
                     var measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
@@ -479,7 +479,7 @@ var vm = Vue.component('piano-component', {
                 }
 
                 // TODO: Refactor following blocks into a loop
-                if (numBeatsQcPlaysInPhrase >= 2) {
+                if (jobj.numBeatsQcPlaysInPhrase >= 2) {
                     // Get 2nd melody note to follow 1st melody note
                     measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
                     console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
@@ -494,7 +494,7 @@ var vm = Vue.component('piano-component', {
                 }
 
 
-                if (numBeatsQcPlaysInPhrase >= 3) {
+                if (jobj.numBeatsQcPlaysInPhrase >= 3) {
                     // Get 3rd melody note to follow 2st melody note
                     measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
                     console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
@@ -508,7 +508,7 @@ var vm = Vue.component('piano-component', {
                     jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
                 }
 
-                if (numBeatsQcPlaysInPhrase >= 4) {
+                if (jobj.numBeatsQcPlaysInPhrase >= 4) {
                   // Get 4th melody note to follow 3rd melody note
                   measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
                   console.log('popMeas melody3 for' + measMelodyBasisState + ": " + measMelodyBasisState);
