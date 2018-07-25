@@ -198,6 +198,9 @@ var vm = Vue.component('piano-component', {
       numBeatsUserPlaysInPhrase: 0,
       numBeatsQcPlaysInPhrase: 0,
       quarterNoteDuration: 0,
+      quarterNoteDurationMax: 250,
+      quarterNoteDurationDefault: 150,
+      quarterNoteDurationFactor: 0.25,
       phraseStartTime: 0,
       phraseEndTime: 0,
       jamming: false,
@@ -365,11 +368,11 @@ var vm = Vue.component('piano-component', {
 
       this.numBeatsQcPlaysInPhrase = numBeatsInSharedPhrase - userPhraseBeats;
 
-      var quarterNoteDurationMax = 250;
-      var quarterNoteDurationDefault = 150;
+      this.quarterNoteDurationMax = 250;
+      this.quarterNoteDurationDefault = 150;
 
       // Constant quarter note duration factor
-      var quarterNoteDurationFactor = 0.25;
+      this.quarterNoteDurationFactor = 0.25;
 
       this.notes = [];
       this.stopplay();
@@ -389,7 +392,7 @@ var vm = Vue.component('piano-component', {
           midiInput.addListener('noteon', "all",
             function (e) {
               if (jobj.numNoteOnEvents % jobj.numBeatsUserPlaysInPhrase == 0) {
-                this.phraseStartTime = Date.now();
+                jobj.phraseStartTime = Date.now();
               }
 
               jobj.numNoteOnEvents++;
@@ -414,14 +417,14 @@ var vm = Vue.component('piano-component', {
 
 
               if (jobj.numNoteOnEvents % jobj.numBeatsUserPlaysInPhrase == 0) {
-                this.phraseEndTime = Date.now();
+                jobj.phraseEndTime = Date.now();
                 if (jobj.numBeatsUserPlaysInPhrase == 1) {
-                  this.quarterNoteDuration = quarterNoteDurationDefault;
+                  jobj.quarterNoteDuration = jobj.quarterNoteDurationDefault;
                 }
                 else {
-                  this.quarterNoteDuration = ((this.phraseEndTime - this.phraseStartTime) /
-                    (jobj.numBeatsUserPlaysInPhrase - 1) * quarterNoteDurationFactor) | 0;
-                  this.quarterNoteDuration = Math.min(this.quarterNoteDuration, quarterNoteDurationMax);
+                  jobj.quarterNoteDuration = ((jobj.phraseEndTime - jobj.phraseStartTime) /
+                    (jobj.numBeatsUserPlaysInPhrase - 1) * jobj.quarterNoteDurationFactor) | 0;
+                  jobj.quarterNoteDuration = Math.min(jobj.quarterNoteDuration, jobj.quarterNoteDurationMax);
                 }
 
                 jobj.jamming = true;
@@ -458,7 +461,7 @@ var vm = Vue.component('piano-component', {
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
                 console.log('melodyToyPianoPitchNum 1: ' + melodyToyPianoPitchNum);
 
-                jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration);
+                jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration);
 
 
                 if (hrv.harmonyenabled) {
@@ -490,7 +493,7 @@ var vm = Vue.component('piano-component', {
                         jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
                     console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                    jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 2);
+                    jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 2);
                 }
 
 
@@ -505,7 +508,7 @@ var vm = Vue.component('piano-component', {
                         jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
                     console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
-                    jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 3);
+                    jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 3);
                 }
 
                 if (jobj.numBeatsQcPlaysInPhrase >= 4) {
@@ -519,7 +522,7 @@ var vm = Vue.component('piano-component', {
                       jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
                   console.log('melodyToyPianoPitchNum 3: ' + melodyToyPianoPitchNum);
 
-                  jobj.addnotedelayed(melodyToyPianoPitchNum, this.quarterNoteDuration * 4);
+                  jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 4);
                 }
 
               }
