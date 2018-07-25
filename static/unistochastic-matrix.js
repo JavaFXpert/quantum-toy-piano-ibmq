@@ -178,7 +178,6 @@ Vue.component('unistochastic-matrix', {
       else if (presetnum == 5) {
         // Identity matrix
         this.setrotationangles([0, 0, 0, 0, 0, 0]);
-        rv.bellState = true;
       }
     },
 

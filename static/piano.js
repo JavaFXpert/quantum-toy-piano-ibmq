@@ -377,7 +377,9 @@ var vm = Vue.component('piano-component', {
       this.notes = [];
       this.stopplay();
       this.startplay();
+    },
 
+    enableJamming: function() {
       var jobj = this;
       WebMidi.enable(function (err) {
 
@@ -708,6 +710,11 @@ var vm = Vue.component('piano-component', {
       }
       return poppedVal;
     }
+  },
+  beforeMount() {
+    console.log("In beforeMount");
+    this.enableJamming();
   }
+
 });
 
