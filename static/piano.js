@@ -82,11 +82,11 @@ var vm = Vue.component('piano-component', {
         '<button v-if="useharmony()" @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
-        '<button @click="jam(1)">J1</button>' +
-        '<button @click="jam(2)">J2</button>' +
-        '<button @click="jam(3)">J3</button>' +
-        '<button @click="jam(4)">J4</button>' +
-        '<button @click="jam(5)">J5</button>' +
+        '<button v-if="hasJamNotes" @click="jam(1)">J1</button>' +
+        '<button v-if="hasJamNotes" @click="jam(2)">J2</button>' +
+        '<button v-if="hasJamNotes" @click="jam(3)">J3</button>' +
+        '<button v-if="hasJamNotes" @click="jam(4)">J4</button>' +
+        '<button v-if="hasJamNotes" @click="jam(5)">J5</button>' +
         '<button v-if="jamming">JAMMING...<i class="fa fa-play"></i></button>' +
         '<br/><br/>' +
         '<p>Choose a <a href="https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint" ' +
@@ -199,7 +199,8 @@ var vm = Vue.component('piano-component', {
       quarterNoteDuration: 0,
       phraseStartTime: 0,
       phraseEndTime: 0,
-      jamming: false
+      jamming: false,
+      hasJamNotes: false
     }
   },
   methods: {
@@ -311,6 +312,7 @@ var vm = Vue.component('piano-component', {
           "&use_simulator=" + this.usesimulator)
           .then(function (response) {
             vobj.load_notes_from_response(response);
+            vobj.hasJamNotes = true;
           })
           .catch(function (error) {
             console.log(error);
