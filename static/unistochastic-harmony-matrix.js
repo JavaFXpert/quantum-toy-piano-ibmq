@@ -101,9 +101,9 @@ Vue.component('unistochastic-harmony-matrix', {
       '</table>' +
       '<br/>' +
       '<div class="ml-2">' +
-        '<button @click="optimizerotationangles" class="mr-4" :disabled="hrv.harmonyenabled == false">Optimize Rotations</button>' +
-        '<input type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni" :disabled="hrv.harmonyenabled == false"/>' +
-        '<label for="unistochastic" class="mr-4">&nbsp;Show Probabilities</label>' +
+        '<button v-if="hrv.harmonyenabled" @click="optimizerotationangles" class="mr-4" :disabled="hrv.harmonyenabled == false">Optimize Matrix</button>' +
+        '<input v-if="hrv.harmonyenabled" type="checkbox" id="unistochastic" @click="toggleuni" checked="showuni"/>' +
+        '<label for="unistochastic" v-if="hrv.harmonyenabled" class="mr-4">&nbsp;Show Probabilities</label>' +
 
         // UNCOMMENT THE FOLLOWING LINES TO MAKE THE FINE TUNING CONTROLS APPEAR
         // '<label>Zeros penalty factor:</label>' +
@@ -133,11 +133,11 @@ Vue.component('unistochastic-harmony-matrix', {
           '</tr>' +
         '</tbody>' +
       '</table>' +
-      '<button @click="preset(0)" :disabled="hrv.harmonyenabled == false">3rds</button>' +
-      '<button @click="preset(2)" :disabled="hrv.harmonyenabled == false">Cpnt</button>' +
-      '<button @click="preset(3)" :disabled="hrv.harmonyenabled == false">Bell</button>' +
-      '<button @click="preset(4)" :disabled="hrv.harmonyenabled == false">Equ</button>' +
-      '<button @click="preset(5)" :disabled="hrv.harmonyenabled == false">Iden</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(0)">3rds</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(2)">Cpnt</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(3)">Bell</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(4)">Equ</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(5)">Iden</button>' +
     '</div>',
   computed: {
     matrixAsArray: function () {

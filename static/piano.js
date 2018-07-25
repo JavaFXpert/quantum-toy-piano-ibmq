@@ -76,9 +76,10 @@ var vm = Vue.component('piano-component', {
         '<input type="checkbox" id="simulatorselect" @click="togglesimulator" checked="usesimulator"/>' +
         '<label for="simulatorselect" class="mr-4">&nbsp;Use simulator</label>' +
         '<br/>' +
-        '<button @click="request_counterpoint(1)">Species 1</button>' +
-        '<button @click="request_counterpoint(2)">Species 2</button>' +
-        '<button @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
+        '<button v-if="!useharmony()" @click="request_counterpoint(1)">Melody</button>' +
+        '<button v-if="useharmony()" @click="request_counterpoint(1)">Species 1</button>' +
+        '<button v-if="useharmony()" @click="request_counterpoint(2)">Species 2</button>' +
+        '<button v-if="useharmony()" @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
         '<button @click="jam(1)">J1</button>' +
@@ -202,6 +203,9 @@ var vm = Vue.component('piano-component', {
     }
   },
   methods: {
+    useharmony: function() {
+      return hrv.harmonyenabled;
+    },
     togglesimulator: function () {
       this.usesimulator = !(this.usesimulator);
     },
