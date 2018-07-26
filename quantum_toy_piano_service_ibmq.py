@@ -129,6 +129,7 @@ def toy_piano_counterpoint():
 
         qc_melodic = QuantumCircuit(q_reg, c_req)
         rot_melodic_circuit = compute_circuit(melodic_degrees, q_reg, c_req, qc_melodic)
+        print("rot_melodic_circuit.qasm(): ", rot_melodic_circuit.qasm())
 
         if harmonyenabled:
             qc_harmonic = QuantumCircuit(q_reg, c_req)
@@ -365,7 +366,6 @@ def pitch_letter_by_index(pitch_idx):
 
 # Produce output for Lilypond
 def create_lilypond(melody_note_nums, harmony_note_nums, composer):
-    num_pitches_in_octave = 7
     harmony_notes_fact = int(len(harmony_note_nums) / len(melody_note_nums))
     harmonyenabled = harmony_notes_fact > 0
     retval = "\\version \"2.18.2\" \\paper {#(set-paper-size \"a5\")} " +\
