@@ -215,6 +215,9 @@ var vm = Vue.component('piano-component', {
     togglesimulator: function () {
       this.usesimulator = !(this.usesimulator);
     },
+    playing: function() {
+      return this.playing_time >= 1;
+    },
     playnote: function(id,volume){
       if (id>0){
         var audio_obj=$("audio[data-num='"+id+"']")[0];
@@ -235,6 +238,7 @@ var vm = Vue.component('piano-component', {
       // }
     },
     startplay: function(){
+      var timeoutTime = 5000;
       this.now_note_id=0;
       this.playing_time=0;
       this.next_note_id=0;
@@ -248,6 +252,18 @@ var vm = Vue.component('piano-component', {
           }
           else {
             vobj.jamming = true;
+          }
+        }
+        else {
+          // Stop playing if it's been too long since last note was played
+          if (vobj.now_note_id > 0) {
+            var lastNotePlayed = vobj.notes[vobj.now_note_id - 1];
+            if (lastNotePlayed != undefined) {
+              if (vobj.playing_time > lastNotePlayed.time + timeoutTime) {
+                vobj.stopplay();
+                return;
+              }
+            }
           }
         }
         vobj.playing_time++;
@@ -407,7 +423,11 @@ var vm = Vue.component('piano-component', {
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave, userInstrument);
               console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
-              if (!jobj.jamming) {
+              if (!jobj.playing()) {
+                jobj.addnote(toyPianoPitchNum);
+                return;
+              }
+              else if (!jobj.jamming) {
                 jobj.addnotedelayed(toyPianoPitchNum, 0);
               }
               else {
