@@ -96,14 +96,18 @@ def toy_piano_counterpoint():
     print()
     print("use_simulator: ", use_simulator)
 
+    onlyReturnJamNotes = False
+    # If 0 species passed in, compute a species 3 to make maximum number of jam notes
+    if species == 0:
+        onlyReturnJamNotes = True
+        species = 3
+
     if (len(melodic_degrees) == DEGREES_OF_FREEDOM and
         (len(harmonic_degrees) == DEGREES_OF_FREEDOM or not harmonyenabled) and
         1 <= species <= 3 and
         0 <= pitch_index < DIATONIC_SCALE_OCTAVE_PITCHES):
 
         circuit_dict = {}  # Key is circuit name, value is circuit
-
-
 
         res_dict = dict()
         res_dict['000_m'] = deque([])
@@ -140,7 +144,6 @@ def toy_piano_counterpoint():
         # Note: 11 melody, 7 harmony is currently a small enough batch for IBMQ devices
         num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
 
-        # TODO: LEFT OFF HERE
         num_required_harmonic_circuits_per_pitch = (7 if harmonyenabled else 0)
 
         # input_pitch = 0
@@ -159,8 +162,6 @@ def toy_piano_counterpoint():
 
                 input_qc.extend(rot_melodic_circuit)
                 circuit_dict[qubit_string + "_m_" + format(melodic_circuit_idx, '02')] = input_qc
-
-                # print('input_qc.qasm(): ', input_qc.qasm())
 
         if harmonyenabled:
             input_pitch = 0
@@ -322,6 +323,10 @@ def toy_piano_counterpoint():
                 "lilypond": create_lilypond(melody_note_nums, harmony_note_nums, composer),
                 "toy_piano" : create_toy_piano(melody_note_nums, harmony_note_nums),
                 "full_res_dict": full_res_dict}
+
+    if onlyReturnJamNotes:
+        ret_dict["lilypond"] = ''
+        ret_dict["toy_piano"] = []
 
     return jsonify(ret_dict)
 

@@ -82,6 +82,7 @@ var vm = Vue.component('piano-component', {
         '<button v-if="useharmony()" @click="request_counterpoint(3)">Species 3</button>' + '&nbsp;' +
         '<button v-if="playing_time&lt;=1" @click="startplay">Play<i class="fa fa-play"></i></button>' +
         '<button v-if="playing_time&gt;1" @click="stopplay">Stop<i class="fa fa-pause"></i></button>' + '&nbsp;' +
+        '<button @click="request_counterpoint(0)">Jam Notes</button>' + '&nbsp;' +
         '<button v-if="hasJamNotes" @click="jam(1)">J1</button>' +
         '<button v-if="hasJamNotes" @click="jam(2)">J2</button>' +
         '<button v-if="hasJamNotes" @click="jam(3)">J3</button>' +
@@ -333,7 +334,6 @@ var vm = Vue.component('piano-component', {
           "&use_simulator=" + this.usesimulator)
           .then(function (response) {
             vobj.load_notes_from_response(response);
-            vobj.hasJamNotes = true;
           })
           .catch(function (error) {
             console.log(error);
@@ -352,10 +352,22 @@ var vm = Vue.component('piano-component', {
         }
       }
 
-      this.notes = resp.data.toy_piano;
+      if (resp.data.toy_piano != undefined) {
+        this.notes = resp.data.toy_piano;
+      }
       this.measurementsOriginal = resp.data.full_res_dict;
       this.measurements = $.extend(true, {}, this.measurementsOriginal);
-      alert(resp.data.lilypond)
+      if (resp.data.lilypond != undefined && resp.data.lilypond.length > 0) {
+        alert(resp.data.lilypond);
+        this.hasJamNotes = false;
+      }
+      else if (this.measurements != undefined) {
+        alert("Freshly measured quantum notes are ready for your jamming pleasure");
+        this.hasJamNotes = true;
+      }
+      else {
+        alert("Please report error 1");
+      }
     },
 
     /*
