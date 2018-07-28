@@ -133,8 +133,7 @@ Vue.component('unistochastic-harmony-matrix', {
           '</tr>' +
         '</tbody>' +
       '</table>' +
-      '<button v-if="hrv.harmonyenabled" @click="preset(0)">3rds</button>' +
-      '<button v-if="hrv.harmonyenabled" @click="preset(2)">Cpnt</button>' +
+      '<button v-if="hrv.harmonyenabled" @click="preset(0)">Cons</button>' +
       '<button v-if="hrv.harmonyenabled" @click="preset(3)">Bell</button>' +
       '<button v-if="hrv.harmonyenabled" @click="preset(4)">Equ</button>' +
       '<button v-if="hrv.harmonyenabled" @click="preset(5)">Iden</button>' +
@@ -165,10 +164,6 @@ Vue.component('unistochastic-harmony-matrix', {
       if (presetnum == 0) {
         // Thirds & sixths harmonic intervals
         this.setrotationangles(['225', '270', '180', '165', '270', '150']);
-      }
-      else if (presetnum == 2) {
-        // Minimal counterpoint style
-        this.setrotationangles(['180', '230.8', '180.3', '182.4', '230.7', '177.7']);
       }
       else if (presetnum == 3) {
         // Bell states
