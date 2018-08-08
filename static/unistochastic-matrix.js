@@ -34,7 +34,7 @@ var rv = {
   ],
 
   // Specified resolution of rotation angle degrees at a time to move when optimizing unistochastic matrix
-  degreedecimals: 1,
+  degreedecimals: 0,
 
   // Specified number of iterations over the rotational angles when optimizing unistochastic matrix
   numepochs: 20,
@@ -130,7 +130,7 @@ Vue.component('unistochastic-matrix', {
       '</table>' +
       '<button @click="preset(0)">Asc</button>' +
       '<button @click="preset(1)">Desc</button>' +
-      '<button @click="preset(2)">CaFi</button>' +
+      '<button @click="preset(2)">Cpnt</button>' +
       '<button @click="preset(3)">Bell</button>' +
       '<button @click="preset(4)">Equ</button>' +
       '<button @click="preset(5)">Iden</button>' +

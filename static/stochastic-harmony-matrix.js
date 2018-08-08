@@ -41,7 +41,7 @@ Vue.component('stochastic-harmony-matrix', {
         '<tr v-for="(rowArray, rowIdx) in numrowscols">' +
           '<th>{{rownames[rowIdx]}}</th>' +
           '<td v-for="(colNum, colIdx) in numrowscols">' +
-            '<input type="text" size="3" v-model="mathmatrix[rowIdx][colIdx]"/>' +
+            '<input type="number" min="0" max="1" step="0.1" v-model="mathmatrix[rowIdx][colIdx]"/>' +
           '</td>' +
           '<td>' +
             '{{parseFloat(Math.round(rowTotal(rowIdx) * 100) / 100).toFixed(2)}}' +

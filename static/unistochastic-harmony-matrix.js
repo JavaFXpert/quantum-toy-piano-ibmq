@@ -34,7 +34,7 @@ var hrv = {
   ],
 
   // Specified resolution of rotation angle degrees at a time to move when optimizing unistochastic matrix
-  degreedecimals: 1,
+  degreedecimals: 0,
 
   // Specified number of iterations over the rotational angles when optimizing unistochastic matrix
   numepochs: 20,

@@ -430,10 +430,10 @@ var vm = Vue.component('piano-component', {
               var noteOctave = e.note.octave;
               var noteNameOctave = noteName + noteOctave;
               var noteMidiNumber = WebMidi.noteNameToNumber(noteNameOctave);
-              console.log("Received 'noteon' message (" + noteNameOctave + ", " + jobj.numNoteOnEvents + ").");
+              //console.log("Received 'noteon' message (" + noteNameOctave + ", " + jobj.numNoteOnEvents + ").");
 
               var toyPianoPitchNum = jobj.noteToToyPianoPitch(noteNameOctave, userInstrument);
-              console.log("toyPianoPitchNum: " + toyPianoPitchNum);
+              //console.log("toyPianoPitchNum: " + toyPianoPitchNum);
 
               if (!jobj.playing()) {
                 jobj.addnote(toyPianoPitchNum);
@@ -471,13 +471,13 @@ var vm = Vue.component('piano-component', {
                     // Play harmony on the user's down beat
                     // Get harmony note for note that user played
                     var measHarmonyBasisState = jobj.popMeas(basisState, true);
-                    console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
+                    //console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
 
                     var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
 
                     var harmonyToyPianoPitchNum =
                       jobj.noteToToyPianoPitch(harmonyNoteNameOctave, jobj.getQcInstrument());
-                    console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
+                    //console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
 
                     jobj.addnotedelayed(harmonyToyPianoPitchNum, 0);
                   }
@@ -487,13 +487,13 @@ var vm = Vue.component('piano-component', {
 
                 // Get melody note to follow note that user played
                 var measMelodyBasisState = jobj.popMeas(basisState, false);
-                console.log('popMeas melody1 for' + basisState + ": " + measMelodyBasisState);
+                //console.log('popMeas melody1 for' + basisState + ": " + measMelodyBasisState);
 
                 var melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                 var melodyToyPianoPitchNum =
                     jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
-                console.log('melodyToyPianoPitchNum 1: ' + melodyToyPianoPitchNum);
+                //console.log('melodyToyPianoPitchNum 1: ' + melodyToyPianoPitchNum);
 
                 jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration);
 
@@ -503,13 +503,13 @@ var vm = Vue.component('piano-component', {
                     // Play harmony on the QC down beat
                     // Get harmony note for melody note
                     var measHarmonyBasisState = jobj.popMeas(measMelodyBasisState, true);
-                    console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
+                    //console.log('popMeas harmony for' + measHarmonyBasisState + ": " + measHarmonyBasisState);
 
                     var harmonyNoteNameOctave = jobj.basisStateToNote(measHarmonyBasisState, noteOctave + 1);
 
                     var harmonyToyPianoPitchNum =
                       jobj.noteToToyPianoPitch(harmonyNoteNameOctave, jobj.getQcInstrument());
-                    console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
+                    //console.log('harmonyToyPianoPitchNum: ' + harmonyToyPianoPitchNum);
 
                     jobj.addnotedelayed(harmonyToyPianoPitchNum, 0);
                   }
@@ -519,13 +519,13 @@ var vm = Vue.component('piano-component', {
                 if (jobj.numBeatsQcPlaysInPhrase >= 2) {
                     // Get 2nd melody note to follow 1st melody note
                     measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
-                    console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
+                    //console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
 
                     melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                     melodyToyPianoPitchNum =
                         jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
-                    console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
+                    //console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
                     jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 2);
                 }
@@ -534,13 +534,13 @@ var vm = Vue.component('piano-component', {
                 if (jobj.numBeatsQcPlaysInPhrase >= 3) {
                     // Get 3rd melody note to follow 2st melody note
                     measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
-                    console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
+                    //console.log('popMeas melody2 for' + measMelodyBasisState + ": " + measMelodyBasisState);
 
                     melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                     melodyToyPianoPitchNum =
                         jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
-                    console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
+                    //console.log('melodyToyPianoPitchNum 2: ' + melodyToyPianoPitchNum);
 
                     jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 3);
                 }
@@ -548,13 +548,13 @@ var vm = Vue.component('piano-component', {
                 if (jobj.numBeatsQcPlaysInPhrase >= 4) {
                   // Get 4th melody note to follow 3rd melody note
                   measMelodyBasisState = jobj.popMeas(measMelodyBasisState, false);
-                  console.log('popMeas melody3 for' + measMelodyBasisState + ": " + measMelodyBasisState);
+                  //console.log('popMeas melody3 for' + measMelodyBasisState + ": " + measMelodyBasisState);
 
                   melodyNoteNameOctave = jobj.basisStateToNote(measMelodyBasisState, noteOctave);
 
                   melodyToyPianoPitchNum =
                       jobj.noteToToyPianoPitch(melodyNoteNameOctave, jobj.getQcInstrument());
-                  console.log('melodyToyPianoPitchNum 3: ' + melodyToyPianoPitchNum);
+                  //console.log('melodyToyPianoPitchNum 3: ' + melodyToyPianoPitchNum);
 
                   jobj.addnotedelayed(melodyToyPianoPitchNum, jobj.quarterNoteDuration * 4);
                 }
