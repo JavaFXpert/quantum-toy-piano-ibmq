@@ -192,7 +192,7 @@ def toy_piano_counterpoint():
             quantum_backend = lowest_pending_jobs()
             if quantum_backend == "ibmqx4":
                 composer = "IBM Q 5 Tenerife"
-            elif quantum_backend == "ibmqx5":
+            elif quantum_backend == "ibmq_16_rueschlikon":
                 composer = "IBM Q 16 Rueschlikon"
             else:
                 composer = "IBM Quantum Computer"
@@ -441,7 +441,7 @@ def lowest_pending_jobs():
     device_status = [get_backend(backend).status
                      for backend in list_of_backends]
 
-    best = min([x for x in device_status if x['available'] is True],
+    best = min([x for x in device_status if x['operational'] is True],
                key=lambda x: x['pending_jobs'])
     return best['name']
 
