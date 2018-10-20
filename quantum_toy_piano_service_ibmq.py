@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, QuantumProgram
-from qiskit import available_backends, execute, compile, register, get_backend
+from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
+from qiskit import available_backends, execute, compile, register, get_backend, IBMQ, Aer
+from qiskit.backends.joberror import JobError
+from qiskit.backends.ibmq import least_busy
 from math import *
 import numpy as np
 from flask import Flask, jsonify, request
@@ -70,6 +72,7 @@ CIRCUIT_RESULT_KEY_LENGTH = 5 # '000_m' is such a key, for example
 #        start_beat is the beat in the entire piece for which the note was produced
 #        pitch_probs is an array of eight probabilities from which the pitch_index resulted
 ###
+
 
 @app.route('/toy_piano_counterpoint')
 def toy_piano_counterpoint():
@@ -143,7 +146,10 @@ def toy_piano_counterpoint():
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
         # Note: 11 melody, 7 harmony is currently a small enough batch for IBMQ devices
         num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
-
+        if species == 2:
+            num_required_melodic_circuits_per_pitch = 6
+        elif species == 1:
+            num_required_melodic_circuits_per_pitch = 3
         num_required_harmonic_circuits_per_pitch = (7 if harmonyenabled else 0)
 
         # input_pitch = 0
@@ -185,30 +191,37 @@ def toy_piano_counterpoint():
 
         # print(circuit_dict)
 
+        quantum_backend = Aer.get_backend('qasm_simulator')
+
         if use_simulator:
-            quantum_backend = "local_qasm_simulator"
-            composer = "IBM Quantum Simulator"
+            pass
         else:
-            quantum_backend = lowest_pending_jobs()
-            if quantum_backend == "ibmqx4":
-                composer = "IBM Q 5 Tenerife"
-            elif quantum_backend == "ibmq_16_rueschlikon":
-                composer = "IBM Q 16 Rueschlikon"
-            else:
-                composer = "IBM Quantum Computer"
+            ibmq_backends = IBMQ.backends()
+
+            print("Remote backends: ", ibmq_backends)
+
+            try:
+                quantum_backend = least_busy(IBMQ.backends(simulator=False))
+            except:
+                print("All devices are currently unavailable.")
 
         print('quantum_backend: ', quantum_backend)
+        composer = str(quantum_backend)
+        print('composer: ', composer)
 
-            # quantum_backend = "ibmqx4" # "ibmqx5"
-            # composer = "IBM Q 5 Tenerife" # "IBM Q 16 Rueschlikon"
+        job_exp = execute(circuit_dict.values(), quantum_backend, shots=1)
 
-        job = execute(circuit_dict.values(), quantum_backend, shots=1)
+        try:
+            job_id = job_exp.job_id()  # It will block until completing submission.
+            print('The job {} was successfully submitted'.format(job_id))
 
-        job_result = job.result()
+            job_result = job_exp.result()  # It will block until finishing.
+            print('The job finished with result {}'.format(job_result))
 
-        if use_simulator:
-            while not job.done:
-                time.sleep(30)
+        except JobError as ex:
+            print("Something wrong happened!: {}".format(ex))
+
+        print(job_exp.status)
 
         for circuit_name in circuit_dict.keys():
             # print(circuit_name)
@@ -434,16 +447,6 @@ def create_toy_piano(melody_note_nums, harmony_note_nums):
 
     return sorted_notes
 
-def lowest_pending_jobs():
-    """Returns the backend with lowest pending jobs."""
-    list_of_backends = available_backends(
-        {'local': False, 'simulator': False})
-    device_status = [get_backend(backend).status
-                     for backend in list_of_backends]
-
-    best = min([x for x in device_status if x['operational'] is True],
-               key=lambda x: x['pending_jobs'])
-    return best['name']
 
 if __name__ == '__main__':
     # app.run()
