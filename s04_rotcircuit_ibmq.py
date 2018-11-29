@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
-from qiskit import available_backends, execute
+# from qiskit import available_backends, execute
 
 from math import *
 import numpy as np

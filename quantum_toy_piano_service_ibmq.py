@@ -14,8 +14,7 @@
 # limitations under the License.
 #
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
-from qiskit import available_backends, execute, compile, register, get_backend, IBMQ, Aer
-from qiskit.backends.joberror import JobError
+from qiskit import execute, IBMQ, Aer
 from qiskit.backends.ibmq import least_busy
 from math import *
 import numpy as np
@@ -26,11 +25,12 @@ from s04_rotcircuit_ibmq import *
 from collections import deque
 import time
 
-from qiskit import register
+# from qiskit import register
 
 try:
     import Qconfig
-    register(Qconfig.APItoken, Qconfig.config["url"])
+
+    IBMQ.enable_account(Qconfig.APItoken, Qconfig.config["url"])
 except:
     print("""WARNING: There's no connection with the API for remote backends.
                  Have you initialized a Qconfig.py file with your personal token?
@@ -147,9 +147,9 @@ def toy_piano_counterpoint():
         # Note: 11 melody, 7 harmony is currently a small enough batch for IBMQ devices
         num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
         if species == 2:
-            num_required_melodic_circuits_per_pitch = 6
+            num_required_melodic_circuits_per_pitch = 11
         elif species == 1:
-            num_required_melodic_circuits_per_pitch = 3
+            num_required_melodic_circuits_per_pitch = 11
         num_required_harmonic_circuits_per_pitch = (7 if harmonyenabled else 0)
 
         # input_pitch = 0
@@ -211,15 +211,15 @@ def toy_piano_counterpoint():
 
         job_exp = execute(circuit_dict.values(), quantum_backend, shots=1)
 
-        try:
-            job_id = job_exp.job_id()  # It will block until completing submission.
-            print('The job {} was successfully submitted'.format(job_id))
+#        try:
+        job_id = job_exp.job_id()  # It will block until completing submission.
+        print('The job {} was successfully submitted'.format(job_id))
 
-            job_result = job_exp.result()  # It will block until finishing.
-            print('The job finished with result {}'.format(job_result))
+        job_result = job_exp.result()  # It will block until finishing.
+        print('The job finished with result {}'.format(job_result))
 
-        except JobError as ex:
-            print("Something wrong happened!: {}".format(ex))
+#        except JobError as ex:
+#            print("Something wrong happened!: {}".format(ex))
 
         print(job_exp.status)
 
