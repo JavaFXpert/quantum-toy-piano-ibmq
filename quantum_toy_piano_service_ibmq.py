@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
-from qiskit import execute, IBMQ, Aer
-from qiskit.backends.ibmq import least_busy
+from qiskit import execute, IBMQ, BasicAer
+from qiskit.providers.ibmq import least_busy
 from math import *
 import numpy as np
 from flask import Flask, jsonify, request
@@ -191,7 +191,7 @@ def toy_piano_counterpoint():
 
         # print(circuit_dict)
 
-        quantum_backend = Aer.get_backend('qasm_simulator')
+        quantum_backend = BasicAer.get_backend('qasm_simulator')
 
         if use_simulator:
             pass

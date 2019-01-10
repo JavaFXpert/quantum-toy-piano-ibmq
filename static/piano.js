@@ -74,9 +74,9 @@ var vm = Vue.component('piano-component', {
         '</div>' +
       '</div>' +
       '<div class="controls">' +
-        '<br/>' +
-        '<input type="checkbox" id="simulatorselect" @click="togglesimulator" checked="usesimulator"/>' +
-        '<label for="simulatorselect" class="mr-4">&nbsp;Use simulator</label>' +
+        //'<br/>' +
+        //'<input type="checkbox" id="simulatorselect" @click="togglesimulator" checked="usesimulator"/>' +
+        //'<label for="simulatorselect" class="mr-4">&nbsp;Use simulator</label>' +
         '<br/>' +
         '<button v-if="!useharmony()" @click="request_counterpoint(1)">Melody</button>' +
         '<button v-if="useharmony()" @click="request_counterpoint(1)">Species 1</button>' +
