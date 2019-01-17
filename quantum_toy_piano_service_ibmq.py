@@ -145,12 +145,12 @@ def toy_piano_counterpoint():
         # Create all of the potentially required melody circuits
         # TODO: Generalize to handle any number of pitches, and species, and remove hardcoded values
         # Note: 11 melody, 7 harmony is currently a small enough batch for IBMQ devices
-        num_required_melodic_circuits_per_pitch = 11 # 6 for first, 16 for second, 27 for third-species
+        num_required_melodic_circuits_per_pitch = (11 if use_simulator else 6)  # 6 for first, 16 for second, 27 for third-species
         if species == 2:
-            num_required_melodic_circuits_per_pitch = 11
+            num_required_melodic_circuits_per_pitch = (11 if use_simulator else 6)
         elif species == 1:
-            num_required_melodic_circuits_per_pitch = 11
-        num_required_harmonic_circuits_per_pitch = (7 if harmonyenabled else 0)
+            num_required_melodic_circuits_per_pitch = (11 if use_simulator else 6)
+        num_required_harmonic_circuits_per_pitch = ((8 if use_simulator else 3) if harmonyenabled else 0)
 
         # input_pitch = 0
         for pitch_idx in range(0, DIATONIC_SCALE_OCTAVE_PITCHES):
