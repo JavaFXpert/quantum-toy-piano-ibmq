@@ -28,13 +28,12 @@ import time
 # from qiskit import register
 
 try:
-    import Qconfig
-
-    IBMQ.enable_account(Qconfig.APItoken, Qconfig.config["url"])
+    provider = IBMQ.load_account()
 except:
-    print("""WARNING: There's no connection with the API for remote backends.
-                 Have you initialized a Qconfig.py file with your personal token?
-                 For now, there's only access to local simulator backends...""")
+    print("""WARNING: Could not load your IBMQ backend account. 
+        Configure your IBMQ credentials using 'IMBQ.save_account' 
+        The method is described here
+        https://github.com/Qiskit/qiskit-ibmq-provider """)
 
 app = Flask(__name__)
 CORS(app)
@@ -189,19 +188,19 @@ def toy_piano_counterpoint():
 
                     # print('input_qc.qasm(): ', input_qc.qasm())
 
-        # print(circuit_dict)
+        #print(circuit_dict)
 
         quantum_backend = BasicAer.get_backend('qasm_simulator')
 
         if use_simulator:
             pass
         else:
-            ibmq_backends = IBMQ.backends()
 
+            ibmq_backends = provider.backends()
             print("Remote backends: ", ibmq_backends)
 
             try:
-                quantum_backend = least_busy(IBMQ.backends(simulator=False))
+                quantum_backend = least_busy(provider.backends(simulator=False))
             except:
                 print("All devices are currently unavailable.")
 
@@ -209,7 +208,7 @@ def toy_piano_counterpoint():
         composer = str(quantum_backend)
         print('composer: ', composer)
 
-        job_exp = execute(circuit_dict.values(), quantum_backend, shots=1)
+        job_exp = execute(list(circuit_dict.values()), quantum_backend, shots=1)
 
 #        try:
         job_id = job_exp.job_id()  # It will block until completing submission.
