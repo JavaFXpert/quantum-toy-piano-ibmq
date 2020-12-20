@@ -40,7 +40,7 @@ FIG. 4. User interface for the performance of your quantum musical composition
 
 
 
-By default the **Use simulator** checkbox is selected, but to indicate that you want to use a real quantum computer, deselect the checkbox. Also by default, the starting note of the melody in your composition will be in the C pitch class. You may choose a different starting note (either D, E or F) by selecting it from the on-screen piano keyboard. As mentioned earlier, the ending note in both the melody and harmony staves will be of the same pitch class as the starting note of the melody. Choosing a different starting note puts your your composition into a different [musical mode](https://en.wikipedia.org/w/index.php?title=Musical_mode), giving it a different quality or feeling.  
+By default the **Use simulator** checkbox is selected, but to indicate that you want to use a real quantum computer, deselect the checkbox. Also by default, the starting note of the melody in your composition will be in the C pitch class. You may choose a different starting note (either D, E or F) by selecting it from the on-screen piano keyboard. As mentioned earlier, the ending note in both the melody and harmony staves will be of the same pitch class as the starting note of the melody. Choosing a different starting note puts your composition into a different [musical mode](https://en.wikipedia.org/w/index.php?title=Musical_mode), giving it a different quality or feeling.  
 
 The buttons labeled **Species** refer to three of the five [species of counterpoint music](https://en.wikipedia.org/wiki/Counterpoint#Species_counterpoint). Fig. 1 is an example of third species counterpoint, insofar as it meets the requirement of having four notes in one staff against one note in another staff. Figs. 5 and 6 show example quantum computer performances of first and second species counterpoint (to the extent that they meet the note against note, and two notes against one note, requirements respectively). 
 
@@ -98,7 +98,7 @@ To install and run Quantum Music Composer for IBM quantum computers:
 
 ## Questions / Feedback
 
-Please reach out to me (James Weaver) on the [QISkit](https://qiskit.org/) Slack community or [@JavaFXpert](https://twitter.com/JavaFXpert) on Twitter
+Please reach out to me (James Weaver) on the [Qiskit](https://qiskit.org/) Slack community or [@JavaFXpert](https://twitter.com/JavaFXpert) on Twitter
 
 ## More Improvisational Compositions
 
